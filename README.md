@@ -25,3 +25,13 @@ Präsentationen: Konzept 04./11./18.11., EDA 02./09./16.12., Finale 20.01.2027.
 | Modeling & Evaluation | 10 |
 | Hypothesentest | 2 |
 | Interpretation | 4 |
+
+## Material
+
+- `Folien/`: Vorlesungsfolien (neue Folien hier ablegen)
+- Kurs-Notebooks als Vorlage für Methoden: <https://git.uibk.ac.at/informatik/dbis/dbis-teaching/data-engineering-analytics-notebooks>
+- Datasheet-Vorlage: Gebru et al., *Datasheets for Datasets*, <https://arxiv.org/abs/1803.09010>
+
+## Setup
+
+Python-Umgebung wie in den Kurs-Notebooks: `pipenv install`, dann `pipenv run jupyter lab`.
