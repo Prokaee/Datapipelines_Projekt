@@ -3,7 +3,32 @@
 Gruppenprojekt (max. 3 Personen, 30 Punkte) in Foundations of Data Engineering and Analytics.
 Angabe: [Angabe/project.pdf](Angabe/project.pdf), Regeln: [Angabe/guidelines.pdf](Angabe/guidelines.pdf).
 
-Forschungsfrage: _noch offen_
+Thema: **Multi-Horizon Stock Market Return Forecasting, Factor Premiums, and Drawdown Dynamics**
+
+Forschungsfrage: Wie gut sagen Bewertung (P/E, CAPE), Momentum, Volatilität und Drawdown die realen Aktienrenditen über 1, 5 und 10 Jahre voraus, und schlagen Timing- oder Faktorstrategien einfaches Buy-and-Hold?
+
+## Team
+
+| Name | GitHub |
+|---|---|
+| Michael Prokop | Prokaee |
+| Raphael Erler | E3472 |
+| Richard Zeilinger | Richard12321 |
+
+## Links
+
+- Konzept (Google Doc): <https://docs.google.com/document/d/1FOaJ99wdJmuM_hL40cUTRf_Pdub8NUN0EDKZzbIuM78/edit?usp=sharing>
+- Präsentation Konzept (Google Slides): <https://docs.google.com/presentation/d/1dBuTkAMHYQ3pNvWY-ldbyVkEiVOrH2IF/edit?usp=sharing&ouid=108864958121520797417&rtpof=true&sd=true>
+- Repo: <https://github.com/Prokaee/Datapipelines_Projekt>
+- Daten: Robert Shiller, *U.S. Stock Markets 1871–Present*, <https://shillerdata.com/> (`ie_data.xls`, Stand 26.10.2026 in `data/raw/`)
+
+## Dateien
+
+| Datei | Inhalt |
+|---|---|
+| `01_preprocessing.ipynb` / `.html` | Laden, Cleaning, Features, Zielwerte |
+| `data/raw/ie_data.xls` | Rohdaten, unverändert |
+| `data/shiller_clean.csv` | bereinigte Daten, Basis für EDA und Modelle |
 
 ## Deadlines (OLAT, jeweils 23:59)
 
