@@ -13,7 +13,7 @@ Forschungsfrage: Wie gut sagen Bewertung (P/E, CAPE), Momentum, Volatilität und
 |---|---|
 | Michael Prokop | Prokaee |
 | Raphael Erler | E3472 |
-| Richard Zeilinger | Richard12321 |
+| Richard Zallinger | Richard12321 |
 
 ## Links
 
