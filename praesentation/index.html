@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Concept slides for a Shiller-data project on forecasting U.S. real stock returns over 1, 5 and 10 years.">
+<title>Multi-Horizon Return Forecasting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+
+<section class="slide" id="s1" aria-label="Title">
+  <div class="container">
+    <div class="title-top">
+      <div>
+        <h1>Multi-Horizon Stock Market Return Forecasting</h1>
+      </div>
+      <div>
+        <p class="lead">Can 155 years of market data predict U.S. stock returns?</p>
+        <p class="meta" style="margin-top: var(--space-lg)">Raphael Erler, Richard Zallinger and Michael Prokop</p>
+      </div>
+    </div>
+    <figure class="sheet" style="margin: 0">
+      <svg class="chart" viewBox="0 0 1200 330" role="img" aria-label="Shiller CAPE from 1881 to 2026: low of 4.8 in December 1920, peak of 32.9 in September 1929, all-time high of 44.9 in December 1999, 41.1 in June 2026"><line class="grid" x1="40" x2="1150" y1="239.2" y2="239.2"/><text x="32" y="243.2" text-anchor="end">10</text><line class="grid" x1="40" x2="1150" y1="182.4" y2="182.4"/><text x="32" y="186.4" text-anchor="end">20</text><line class="grid" x1="40" x2="1150" y1="125.6" y2="125.6"/><text x="32" y="129.6" text-anchor="end">30</text><line class="grid" x1="40" x2="1150" y1="68.8" y2="68.8"/><text x="32" y="72.8" text-anchor="end">40</text><line class="axis" x1="40" x2="1150" y1="296" y2="296"/><text x="191.0" y="318" text-anchor="middle">1900</text><text x="379.8" y="318" text-anchor="middle">1925</text><text x="568.6" y="318" text-anchor="middle">1950</text><text x="757.3" y="318" text-anchor="middle">1975</text><text x="946.1" y="318" text-anchor="middle">2000</text><text x="1134.9" y="318" text-anchor="middle">2025</text><path class="series" d="M48.8 192.0 L49.4 193.8 L50.1 188.5 L50.7 187.6 L51.3 192.9 L52.0 197.6 L52.6 200.8 L53.2 203.4 L53.8 202.2 L54.5 205.2 L55.1 206.8 L55.7 209.8 L56.4 210.2 L57.0 211.2 L57.6 213.2 L58.2 214.5 L58.9 209.4 L59.5 207.7 L60.1 204.6 L60.8 206.5 L61.4 209.7 L62.0 208.6 L62.7 209.3 L63.3 212.2 L63.9 210.6 L64.5 208.2 L65.2 209.0 L65.8 205.8 L66.4 205.6 L67.1 209.9 L67.7 208.2 L68.3 210.7 L68.9 208.7 L69.6 211.6 L70.2 214.3 L70.8 212.2 L71.5 212.6 L72.1 214.8 L72.7 219.9 L73.4 223.0 L74.0 222.3 L74.6 217.7 L75.2 219.4 L75.9 221.1 L76.5 220.9 L77.1 220.3 L77.8 222.0 L78.4 220.6 L79.0 218.6 L79.6 219.6 L80.3 218.7 L80.9 217.2 L81.5 215.2 L82.2 210.7 L82.8 210.7 L83.4 205.8 L84.0 201.1 L84.7 204.0 L85.3 201.8 L85.9 200.0 L86.6 200.8 L87.2 201.0 L87.8 200.6 L88.5 195.1 L89.1 194.9 L89.7 195.6 L90.3 193.1 L91.0 190.7 L91.6 188.4 L92.2 192.7 L92.9 196.5 L93.5 198.6 L94.1 196.6 L94.7 194.7 L95.4 193.2 L96.0 195.3 L96.6 196.9 L97.3 200.8 L97.9 201.1 L98.5 205.6 L99.1 205.2 L99.8 208.0 L100.4 208.5 L101.0 208.2 L101.7 211.7 L102.3 210.5 L102.9 208.5 L103.6 210.3 L104.2 209.2 L104.8 207.4 L105.4 205.2 L106.1 206.8 L106.7 209.6 L107.3 211.2 L108.0 206.4 L108.6 204.3 L109.2 205.0 L109.8 205.1 L110.5 200.2 L111.1 198.5 L111.7 200.4 L112.4 199.0 L113.0 197.8 L113.6 199.5 L114.3 200.4 L114.9 202.1 L115.5 198.7 L116.1 199.8 L116.8 200.6 L117.4 198.6 L118.0 195.6 L118.7 196.2 L119.3 196.8 L119.9 202.4 L120.5 204.9 L121.2 208.8 L121.8 213.0 L122.4 214.7 L123.1 209.2 L123.7 209.0 L124.3 211.3 L124.9 209.3 L125.6 208.4 L126.2 207.8 L126.8 208.0 L127.5 204.9 L128.1 196.2 L128.7 196.2 L129.4 196.4 L130.0 193.3 L130.6 188.7 L131.2 188.6 L131.9 184.7 L132.5 183.5 L133.1 183.7 L133.8 184.5 L134.4 187.5 L135.0 187.6 L135.6 190.4 L136.3 188.4 L136.9 191.6 L137.5 194.1 L138.2 196.1 L138.8 199.1 L139.4 200.4 L140.1 199.3 L140.7 206.8 L141.3 208.9 L141.9 215.0 L142.6 213.7 L143.2 211.3 L143.8 209.9 L144.5 206.1 L145.1 208.1 L145.7 207.4 L146.3 204.8 L147.0 199.3 L147.6 197.9 L148.2 201.5 L148.9 202.6 L149.5 204.4 L150.1 203.5 L150.7 203.1 L151.4 203.2 L152.0 203.0 L152.6 202.3 L153.3 203.1 L153.9 204.2 L154.5 204.0 L155.2 203.8 L155.8 199.8 L156.4 199.0 L157.0 197.0 L157.7 194.0 L158.3 193.2 L158.9 194.6 L159.6 197.9 L160.2 202.4 L160.8 202.1 L161.4 196.8 L162.1 198.5 L162.7 196.2 L163.3 195.2 L164.0 195.5 L164.6 202.0 L165.2 207.4 L165.9 202.7 L166.5 203.3 L167.1 199.6 L167.7 203.0 L168.4 200.2 L169.0 200.9 L169.6 200.5 L170.3 202.0 L170.9 199.9 L171.5 195.4 L172.1 190.8 L172.8 188.7 L173.4 186.6 L174.0 188.5 L174.7 192.3 L175.3 190.0 L175.9 187.2 L176.5 188.9 L177.2 193.8 L177.8 195.7 L178.4 196.1 L179.1 185.1 L179.7 183.2 L180.3 179.3 L181.0 179.8 L181.6 182.5 L182.2 179.2 L182.8 174.1 L183.5 165.3 L184.1 164.5 L184.7 163.1 L185.4 163.7 L186.0 169.7 L186.6 174.7 L187.2 172.6 L187.9 171.6 L188.5 178.0 L189.1 180.4 L189.8 180.1 L190.4 189.8 L191.0 188.8 L191.6 188.6 L192.3 188.2 L192.9 187.2 L193.5 190.3 L194.2 192.7 L194.8 194.4 L195.4 192.3 L196.1 196.5 L196.7 192.1 L197.3 184.6 L197.9 177.0 L198.6 175.6 L199.2 171.6 L199.8 167.8 L200.5 156.0 L201.1 163.8 L201.7 151.3 L202.3 163.3 L203.0 163.7 L203.6 166.5 L204.2 168.4 L204.9 167.7 L205.5 171.7 L206.1 167.9 L206.8 167.2 L207.4 167.4 L208.0 165.0 L208.6 167.2 L209.3 169.8 L209.9 167.4 L210.5 162.9 L211.2 164.6 L211.8 177.4 L212.4 178.6 L213.0 183.0 L213.7 179.1 L214.3 180.3 L214.9 181.6 L215.6 186.8 L216.2 186.9 L216.8 193.4 L217.4 198.6 L218.1 202.1 L218.7 205.9 L219.3 208.2 L220.0 207.3 L220.6 203.6 L221.2 204.6 L221.9 209.4 L222.5 209.1 L223.1 206.3 L223.7 206.5 L224.4 206.8 L225.0 203.5 L225.6 201.9 L226.3 199.4 L226.9 194.2 L227.5 191.6 L228.1 191.1 L228.8 189.4 L229.4 185.3 L230.0 181.4 L230.7 183.5 L231.3 188.4 L231.9 187.8 L232.6 185.0 L233.2 182.9 L233.8 181.9 L234.4 181.0 L235.1 183.6 L235.7 182.8 L236.3 179.6 L237.0 181.1 L237.6 184.5 L238.2 186.7 L238.8 191.4 L239.5 190.7 L240.1 190.6 L240.7 186.1 L241.4 184.7 L242.0 191.0 L242.6 190.7 L243.2 193.5 L243.9 196.0 L244.5 201.9 L245.1 210.8 L245.8 211.0 L246.4 216.1 L247.0 219.9 L247.7 217.4 L248.3 223.7 L248.9 224.8 L249.5 233.5 L250.2 234.9 L250.8 230.7 L251.4 227.4 L252.1 229.5 L252.7 227.0 L253.3 224.4 L253.9 220.8 L254.6 221.0 L255.2 219.3 L255.8 216.2 L256.5 217.3 L257.1 217.4 L257.7 213.1 L258.4 212.3 L259.0 211.3 L259.6 214.8 L260.2 213.8 L260.9 212.0 L261.5 210.2 L262.1 209.7 L262.8 208.6 L263.4 207.6 L264.0 208.5 L264.6 210.0 L265.3 211.4 L265.9 211.4 L266.5 212.6 L267.2 215.7 L267.8 215.4 L268.4 218.2 L269.0 218.2 L269.7 221.3 L270.3 225.2 L270.9 222.9 L271.6 221.9 L272.2 216.2 L272.8 214.9 L273.5 217.3 L274.1 215.5 L274.7 211.7 L275.3 213.8 L276.0 211.6 L276.6 210.0 L277.2 208.4 L277.9 209.8 L278.5 216.6 L279.1 221.8 L279.7 221.4 L280.4 217.7 L281.0 216.6 L281.6 217.3 L282.3 218.9 L282.9 218.2 L283.5 218.1 L284.1 218.2 L284.8 217.4 L285.4 217.3 L286.0 216.3 L286.7 216.6 L287.3 216.8 L287.9 217.7 L288.6 219.8 L289.2 221.1 L289.8 223.8 L290.4 225.1 L291.1 225.2 L291.7 226.4 L292.3 230.5 L293.0 230.3 L293.6 228.5 L294.2 228.5 L294.8 230.6 L295.5 232.8 L296.1 232.3 L296.7 229.6 L297.4 228.1 L298.0 229.4 L298.6 230.3 L299.3 230.5 L299.9 230.8 L300.5 235.0 L301.1 236.2 L301.8 236.2 L302.4 235.5 L303.0 236.1 L303.7 238.1 L304.3 237.0 L304.9 237.2 L305.5 235.0 L306.2 231.0 L306.8 233.1 L307.4 232.4 L308.1 232.6 L308.7 229.9 L309.3 227.4 L309.9 224.3 L310.6 222.6 L311.2 222.4 L311.8 224.3 L312.5 225.4 L313.1 226.3 L313.7 227.8 L314.4 227.0 L315.0 227.1 L315.6 228.2 L316.2 228.5 L316.9 227.2 L317.5 226.6 L318.1 226.4 L318.8 230.1 L319.4 232.5 L320.0 237.8 L320.6 236.3 L321.3 240.2 L321.9 243.1 L322.5 243.1 L323.2 244.0 L323.8 246.4 L324.4 250.0 L325.1 253.3 L325.7 257.0 L326.3 258.9 L326.9 257.6 L327.6 256.8 L328.2 257.3 L328.8 258.3 L329.5 258.0 L330.1 258.5 L330.7 259.2 L331.3 259.6 L332.0 260.5 L332.6 259.7 L333.2 259.4 L333.9 260.6 L334.5 260.8 L335.1 260.0 L335.7 259.3 L336.4 258.8 L337.0 256.6 L337.6 255.5 L338.3 255.4 L338.9 258.7 L339.5 258.2 L340.2 256.9 L340.8 258.8 L341.4 260.6 L342.0 261.6 L342.7 264.6 L343.3 262.7 L343.9 263.8 L344.6 266.2 L345.2 267.0 L345.8 266.8 L346.4 267.1 L347.1 265.5 L347.7 265.2 L348.3 266.5 L349.0 268.5 L349.6 266.5 L350.2 265.7 L350.9 266.1 L351.5 265.5 L352.1 263.7 L352.7 266.0 L353.4 266.1 L354.0 266.4 L354.6 265.1 L355.3 264.5 L355.9 262.5 L356.5 260.9 L357.1 259.9 L357.8 258.9 L358.4 256.9 L359.0 254.3 L359.7 252.4 L360.3 252.6 L360.9 252.3 L361.5 249.9 L362.2 248.5 L362.8 247.5 L363.4 250.0 L364.1 250.2 L364.7 249.1 L365.3 246.9 L366.0 245.9 L366.6 247.7 L367.2 249.9 L367.8 251.7 L368.5 253.6 L369.1 253.0 L369.7 252.9 L370.4 253.7 L371.0 252.3 L371.6 250.8 L372.2 249.2 L372.9 248.7 L373.5 249.3 L374.1 250.1 L374.8 250.2 L375.4 249.3 L376.0 247.4 L376.6 245.4 L377.3 246.2 L377.9 247.1 L378.5 244.4 L379.2 242.0 L379.8 239.7 L380.4 238.9 L381.1 240.8 L381.7 241.0 L382.3 239.6 L382.9 239.2 L383.6 238.3 L384.2 237.4 L384.8 236.0 L385.5 234.0 L386.1 233.0 L386.7 231.5 L387.3 230.4 L388.0 230.2 L388.6 234.2 L389.2 236.1 L389.9 235.2 L390.5 231.7 L391.1 228.0 L391.8 224.5 L392.4 223.5 L393.0 225.1 L393.6 224.1 L394.3 222.0 L394.9 221.1 L395.5 218.6 L396.2 216.4 L396.8 213.8 L397.4 210.9 L398.0 210.2 L398.7 206.2 L399.3 200.3 L399.9 194.9 L400.6 196.5 L401.2 193.1 L401.8 190.1 L402.4 189.2 L403.1 188.8 L403.7 182.6 L404.3 175.0 L405.0 171.7 L405.6 176.8 L406.2 175.8 L406.9 171.8 L407.5 164.6 L408.1 161.3 L408.7 152.4 L409.4 151.2 L410.0 140.9 L410.6 140.5 L411.3 137.4 L411.9 138.0 L412.5 137.2 L413.1 135.7 L413.8 124.2 L414.4 115.3 L415.0 109.0 L415.7 129.7 L416.3 174.4 L416.9 169.6 L417.6 167.8 L418.2 159.9 L418.8 154.9 L419.4 147.9 L420.1 156.8 L420.7 170.9 L421.3 172.8 L422.0 174.3 L422.6 175.7 L423.2 192.1 L423.8 199.5 L424.5 204.6 L425.1 200.9 L425.7 192.7 L426.4 190.3 L427.0 200.0 L427.6 208.4 L428.2 210.3 L428.9 207.7 L429.5 210.6 L430.1 223.0 L430.8 232.5 L431.4 231.0 L432.0 243.0 L432.7 243.0 L433.3 242.9 L433.9 242.5 L434.5 255.1 L435.2 259.7 L435.8 264.4 L436.4 262.9 L437.1 246.0 L437.7 240.8 L438.3 248.1 L438.9 248.2 L439.6 249.4 L440.2 246.8 L440.8 251.9 L441.5 251.7 L442.1 246.9 L442.7 232.7 L443.4 222.3 L444.0 218.7 L444.6 222.9 L445.2 223.4 L445.9 230.3 L446.5 228.6 L447.1 227.1 L447.8 222.9 L448.4 217.9 L449.0 221.6 L449.6 220.1 L450.3 227.6 L450.9 227.0 L451.5 230.1 L452.2 232.5 L452.8 234.7 L453.4 233.6 L454.0 231.7 L454.7 230.6 L455.3 231.4 L455.9 233.7 L456.6 237.5 L457.2 233.4 L457.8 228.4 L458.5 225.3 L459.1 221.6 L459.7 216.5 L460.3 214.8 L461.0 212.6 L461.6 205.3 L462.2 205.2 L462.9 200.0 L463.5 194.3 L464.1 191.1 L464.7 190.8 L465.4 196.2 L466.0 192.5 L466.6 187.0 L467.3 185.4 L467.9 184.0 L468.5 178.1 L469.1 174.7 L469.8 176.7 L470.4 173.9 L471.0 170.2 L471.7 171.3 L472.3 179.6 L472.9 185.6 L473.6 189.9 L474.2 184.5 L474.8 183.5 L475.4 200.3 L476.1 214.4 L476.7 221.2 L477.3 222.1 L478.0 219.3 L478.6 220.8 L479.2 225.9 L479.8 229.3 L480.5 228.3 L481.1 226.7 L481.7 212.9 L482.4 212.2 L483.0 215.9 L483.6 206.0 L484.3 205.6 L484.9 207.8 L485.5 208.7 L486.1 208.4 L486.8 208.0 L487.4 218.1 L488.0 214.8 L488.7 213.0 L489.3 210.6 L489.9 211.4 L490.5 204.0 L491.2 201.9 L491.8 203.1 L492.4 204.9 L493.1 204.3 L493.7 205.1 L494.3 205.2 L494.9 204.0 L495.6 216.4 L496.2 223.6 L496.8 220.5 L497.5 218.8 L498.1 215.5 L498.7 214.8 L499.4 212.9 L500.0 217.0 L500.6 216.9 L501.2 222.0 L501.9 222.2 L502.5 225.1 L503.1 227.3 L503.8 226.5 L504.4 223.1 L505.0 224.7 L505.6 225.6 L506.3 229.5 L506.9 233.3 L507.5 238.0 L508.2 237.9 L508.8 240.3 L509.4 244.2 L510.1 246.9 L510.7 247.1 L511.3 244.8 L511.9 243.4 L512.6 244.2 L513.2 243.8 L513.8 240.8 L514.5 240.4 L515.1 240.6 L515.7 237.5 L516.3 234.2 L517.0 233.4 L517.6 232.3 L518.2 230.4 L518.9 229.5 L519.5 228.0 L520.1 231.3 L520.7 230.6 L521.4 231.5 L522.0 234.7 L522.6 234.1 L523.3 232.4 L523.9 233.0 L524.5 231.4 L525.2 233.1 L525.8 232.2 L526.4 229.7 L527.0 228.5 L527.7 229.7 L528.3 230.9 L528.9 229.5 L529.6 230.1 L530.2 229.1 L530.8 227.3 L531.4 225.1 L532.1 225.4 L532.7 223.7 L533.3 221.4 L534.0 220.9 L534.6 222.4 L535.2 222.2 L535.9 217.1 L536.5 213.8 L537.1 211.1 L537.7 210.1 L538.4 206.7 L539.0 205.9 L539.6 209.5 L540.3 204.4 L540.9 204.6 L541.5 206.0 L542.1 213.3 L542.8 216.3 L543.4 228.5 L544.0 231.1 L544.7 232.7 L545.3 231.2 L545.9 230.6 L546.5 227.9 L547.2 231.6 L547.8 233.8 L548.4 234.7 L549.1 232.7 L549.7 229.2 L550.3 231.2 L551.0 234.1 L551.6 232.4 L552.2 233.2 L552.8 234.9 L553.5 236.3 L554.1 238.6 L554.7 237.5 L555.4 234.0 L556.0 231.2 L556.6 229.1 L557.2 231.6 L557.9 233.8 L558.5 234.7 L559.1 233.0 L559.8 236.3 L560.4 236.8 L561.0 236.3 L561.6 238.4 L562.3 238.3 L562.9 239.0 L563.5 239.5 L564.2 243.2 L564.8 240.1 L565.4 238.7 L566.1 238.5 L566.7 236.9 L567.3 236.7 L567.9 234.9 L568.6 233.7 L569.2 232.8 L569.8 232.8 L570.5 231.3 L571.1 229.7 L571.7 229.1 L572.3 235.0 L573.0 232.0 L573.6 230.3 L574.2 228.4 L574.9 229.1 L575.5 230.4 L576.1 226.9 L576.8 225.5 L577.4 227.2 L578.0 226.6 L578.6 227.1 L579.3 228.6 L579.9 227.7 L580.5 225.0 L581.2 224.0 L581.8 224.9 L582.4 227.6 L583.0 225.9 L583.7 223.7 L584.3 224.6 L584.9 224.6 L585.6 225.3 L586.2 225.5 L586.8 224.1 L587.4 222.8 L588.1 222.8 L588.7 224.1 L589.3 225.9 L590.0 223.9 L590.6 221.3 L591.2 220.9 L591.9 221.8 L592.5 221.9 L593.1 225.8 L593.7 225.9 L594.4 228.9 L595.0 228.2 L595.6 228.4 L596.3 231.7 L596.9 230.2 L597.5 228.8 L598.1 228.1 L598.8 226.6 L599.4 225.4 L600.0 224.2 L600.7 221.4 L601.3 219.0 L601.9 218.8 L602.6 216.0 L603.2 214.8 L603.8 213.0 L604.4 211.5 L605.1 208.6 L605.7 204.7 L606.3 203.5 L607.0 200.9 L607.6 202.1 L608.2 199.4 L608.8 200.3 L609.5 195.4 L610.1 189.1 L610.7 190.4 L611.4 186.7 L612.0 192.9 L612.6 186.7 L613.2 186.0 L613.9 189.7 L614.5 189.9 L615.1 183.4 L615.8 183.4 L616.4 188.2 L617.0 190.5 L617.7 186.4 L618.3 187.6 L618.9 192.5 L619.5 195.0 L620.2 196.8 L620.8 196.4 L621.4 199.3 L622.1 204.4 L622.7 204.1 L623.3 202.9 L623.9 200.2 L624.6 199.5 L625.2 198.7 L625.8 204.5 L626.5 208.6 L627.1 214.5 L627.7 216.9 L628.4 217.3 L629.0 216.6 L629.6 216.7 L630.2 215.9 L630.9 216.1 L631.5 213.8 L632.1 212.1 L632.8 210.3 L633.4 207.0 L634.0 204.8 L634.6 201.3 L635.3 198.8 L635.9 196.8 L636.5 193.3 L637.2 194.5 L637.8 192.0 L638.4 190.7 L639.0 189.1 L639.7 190.5 L640.3 186.7 L640.9 187.5 L641.6 192.2 L642.2 192.8 L642.8 192.5 L643.5 189.3 L644.1 191.0 L644.7 195.5 L645.3 197.0 L646.0 196.2 L646.6 197.2 L647.2 194.0 L647.9 196.7 L648.5 195.5 L649.1 198.6 L649.7 201.2 L650.4 198.1 L651.0 195.8 L651.6 190.7 L652.3 186.4 L652.9 182.9 L653.5 179.9 L654.1 178.7 L654.8 180.2 L655.4 181.2 L656.0 176.6 L656.7 177.9 L657.3 176.6 L657.9 171.3 L658.6 170.2 L659.2 174.9 L659.8 173.4 L660.4 173.4 L661.1 177.9 L661.7 186.8 L662.3 199.7 L663.0 197.9 L663.6 195.4 L664.2 196.9 L664.8 200.2 L665.5 193.8 L666.1 189.6 L666.7 185.7 L667.4 184.5 L668.0 185.5 L668.6 180.6 L669.3 178.6 L669.9 179.3 L670.5 181.6 L671.1 178.7 L671.8 175.9 L672.4 176.3 L673.0 177.3 L673.7 175.4 L674.3 172.1 L674.9 170.9 L675.5 168.9 L676.2 167.4 L676.8 166.5 L677.4 168.1 L678.1 164.2 L678.7 166.1 L679.3 164.7 L679.9 162.8 L680.6 162.7 L681.2 165.4 L681.8 162.5 L682.5 161.9 L683.1 162.6 L683.7 161.7 L684.4 160.1 L685.0 167.7 L685.6 168.2 L686.2 166.1 L686.9 162.1 L687.5 159.8 L688.1 159.0 L688.8 160.3 L689.4 158.2 L690.0 160.3 L690.6 166.5 L691.3 163.6 L691.9 170.8 L692.5 172.5 L693.2 173.4 L693.8 181.8 L694.4 186.1 L695.1 188.0 L695.7 182.9 L696.3 182.7 L696.9 178.7 L697.6 175.0 L698.2 172.9 L698.8 171.6 L699.5 170.1 L700.1 172.4 L700.7 171.0 L701.3 169.7 L702.0 168.6 L702.6 169.5 L703.2 174.1 L703.9 171.3 L704.5 172.6 L705.1 178.8 L705.7 181.6 L706.4 173.8 L707.0 171.7 L707.6 169.5 L708.3 170.9 L708.9 174.4 L709.5 171.3 L710.2 169.4 L710.8 168.3 L711.4 167.8 L712.0 174.0 L712.7 175.7 L713.3 179.8 L713.9 178.5 L714.6 175.4 L715.2 182.7 L715.8 188.7 L716.4 190.1 L717.1 190.3 L717.7 190.0 L718.3 190.1 L719.0 196.5 L719.6 197.8 L720.2 202.0 L720.9 201.1 L721.5 204.8 L722.1 215.7 L722.7 216.8 L723.4 217.2 L724.0 215.0 L724.6 210.8 L725.3 209.5 L725.9 210.2 L726.5 204.9 L727.1 201.6 L727.8 198.3 L728.4 196.1 L729.0 193.1 L729.7 195.1 L730.3 197.9 L730.9 199.0 L731.5 201.1 L732.2 199.1 L732.8 201.6 L733.4 206.1 L734.1 200.6 L734.7 196.8 L735.3 195.6 L736.0 193.7 L736.6 193.1 L737.2 194.5 L737.8 194.6 L738.5 196.0 L739.1 192.9 L739.7 194.8 L740.4 195.2 L741.0 190.6 L741.6 188.8 L742.2 188.4 L742.9 193.1 L743.5 195.9 L744.1 198.6 L744.8 202.1 L745.4 205.0 L746.0 204.5 L746.6 208.0 L747.3 206.9 L747.9 204.3 L748.5 211.6 L749.2 218.2 L749.8 218.0 L750.4 221.3 L751.1 219.2 L751.7 223.6 L752.3 226.8 L752.9 227.4 L753.6 236.0 L754.2 239.3 L754.8 245.9 L755.5 245.5 L756.1 244.3 L756.7 248.2 L757.3 244.5 L758.0 239.7 L758.6 237.4 L759.2 237.0 L759.9 233.7 L760.5 232.6 L761.1 233.2 L761.8 237.9 L762.4 238.9 L763.0 236.6 L763.6 236.0 L764.3 237.1 L764.9 231.7 L765.5 229.4 L766.2 229.1 L766.8 228.8 L767.4 229.6 L768.0 229.5 L768.7 228.3 L769.3 229.2 L769.9 228.0 L770.6 230.6 L771.2 231.2 L771.8 229.2 L772.4 230.1 L773.1 232.5 L773.7 233.2 L774.3 234.6 L775.0 235.1 L775.6 235.2 L776.2 235.0 L776.9 236.7 L777.5 237.8 L778.1 239.6 L778.7 239.6 L779.4 240.1 L780.0 242.6 L780.6 243.7 L781.3 244.3 L781.9 242.5 L782.5 240.3 L783.1 240.8 L783.8 241.5 L784.4 238.1 L785.0 238.5 L785.7 240.9 L786.3 244.4 L786.9 243.9 L787.6 242.4 L788.2 243.9 L788.8 243.5 L789.4 243.1 L790.1 245.0 L790.7 244.7 L791.3 244.8 L792.0 243.0 L792.6 243.1 L793.2 245.6 L793.8 246.5 L794.5 245.2 L795.1 244.6 L795.7 243.4 L796.4 249.0 L797.0 250.4 L797.6 248.9 L798.2 246.5 L798.9 244.3 L799.5 243.2 L800.1 242.5 L800.8 241.6 L801.4 239.8 L802.0 241.4 L802.7 242.1 L803.3 244.6 L803.9 243.1 L804.5 243.1 L805.2 244.7 L805.8 245.0 L806.4 246.9 L807.1 247.1 L807.7 251.9 L808.3 251.5 L808.9 250.5 L809.6 250.4 L810.2 253.0 L810.8 254.2 L811.5 255.6 L812.1 253.8 L812.7 254.2 L813.4 257.1 L814.0 257.5 L814.6 257.4 L815.2 253.1 L815.9 249.6 L816.5 247.6 L817.1 246.9 L817.8 245.3 L818.4 244.4 L819.0 242.6 L819.6 240.9 L820.3 238.9 L820.9 238.2 L821.5 238.1 L822.2 239.8 L822.8 238.3 L823.4 238.2 L824.0 239.1 L824.7 239.3 L825.3 238.9 L825.9 242.2 L826.6 242.1 L827.2 242.2 L827.8 242.7 L828.5 243.9 L829.1 244.8 L829.7 240.4 L830.3 240.0 L831.0 240.6 L831.6 240.0 L832.2 240.6 L832.9 238.2 L833.5 235.4 L834.1 236.0 L834.7 235.9 L835.4 234.7 L836.0 233.5 L836.6 232.4 L837.3 233.9 L837.9 235.5 L838.5 235.0 L839.1 231.5 L839.8 228.4 L840.4 228.3 L841.0 224.5 L841.7 219.9 L842.3 217.8 L842.9 217.8 L843.6 215.9 L844.2 217.5 L844.8 216.0 L845.4 218.4 L846.1 218.7 L846.7 216.1 L847.3 214.9 L848.0 210.1 L848.6 205.0 L849.2 201.4 L849.8 202.8 L850.5 203.0 L851.1 199.2 L851.7 196.5 L852.4 190.6 L853.0 194.3 L853.6 206.7 L854.3 217.8 L854.9 218.9 L855.5 216.0 L856.1 213.6 L856.8 211.5 L857.4 212.8 L858.0 215.1 L858.7 210.8 L859.3 211.6 L859.9 213.7 L860.5 213.0 L861.2 210.4 L861.8 212.5 L862.4 211.0 L863.1 208.8 L863.7 206.7 L864.3 207.6 L864.9 205.4 L865.6 202.6 L866.2 200.0 L866.8 197.9 L867.5 193.8 L868.1 194.0 L868.7 194.5 L869.4 196.8 L870.0 194.5 L870.6 198.0 L871.2 201.2 L871.9 199.4 L872.5 199.5 L873.1 196.2 L873.8 193.8 L874.4 194.2 L875.0 203.2 L875.6 208.2 L876.3 210.9 L876.9 208.8 L877.5 205.1 L878.2 206.5 L878.8 196.5 L879.4 193.8 L880.1 191.9 L880.7 192.6 L881.3 192.8 L881.9 192.3 L882.6 190.1 L883.2 191.0 L883.8 191.1 L884.5 191.5 L885.1 190.7 L885.7 183.1 L886.3 184.2 L887.0 185.9 L887.6 185.8 L888.2 183.7 L888.9 185.6 L889.5 183.8 L890.1 183.2 L890.7 183.2 L891.4 185.1 L892.0 182.4 L892.6 178.8 L893.3 179.4 L893.9 178.1 L894.5 176.3 L895.2 178.5 L895.8 178.2 L896.4 177.7 L897.0 178.0 L897.7 176.6 L898.3 175.5 L898.9 174.9 L899.6 175.3 L900.2 174.5 L900.8 173.1 L901.4 173.9 L902.1 176.4 L902.7 180.9 L903.3 180.1 L904.0 179.6 L904.6 180.8 L905.2 178.1 L905.9 177.8 L906.5 178.8 L907.1 179.8 L907.7 181.4 L908.4 179.6 L909.0 176.1 L909.6 174.1 L910.3 171.2 L910.9 167.9 L911.5 164.8 L912.1 160.9 L912.8 161.4 L913.4 157.5 L914.0 157.6 L914.7 155.2 L915.3 151.3 L915.9 152.8 L916.5 145.8 L917.2 147.8 L917.8 149.0 L918.4 146.7 L919.1 145.8 L919.7 152.2 L920.3 149.0 L921.0 147.5 L921.6 142.8 L922.2 136.4 L922.8 135.5 L923.5 131.8 L924.1 126.4 L924.7 129.1 L925.4 136.1 L926.0 122.5 L926.6 114.8 L927.2 106.0 L927.9 107.1 L928.5 106.8 L929.1 105.5 L929.8 108.9 L930.4 105.0 L931.0 106.1 L931.6 95.5 L932.3 86.4 L932.9 80.9 L933.5 82.9 L934.2 84.0 L934.8 75.8 L935.4 92.2 L936.1 103.2 L936.7 101.9 L937.3 81.3 L937.9 73.1 L938.6 63.1 L939.2 64.2 L939.8 58.7 L940.5 51.0 L941.1 51.9 L941.7 53.9 L942.3 44.4 L943.0 55.1 L943.6 58.4 L944.2 62.6 L944.9 47.2 L945.5 41.2 L946.1 43.5 L946.8 52.5 L947.4 46.3 L948.0 44.4 L948.6 53.3 L949.3 48.5 L949.9 48.6 L950.5 48.0 L951.2 53.6 L951.8 68.2 L952.4 71.7 L953.0 80.5 L953.7 82.3 L954.3 89.1 L954.9 109.5 L955.6 110.5 L956.2 99.7 L956.8 105.6 L957.4 111.1 L958.1 115.6 L958.7 137.2 L959.3 132.2 L960.0 124.1 L960.6 121.3 L961.2 122.6 L961.9 129.4 L962.5 122.5 L963.1 129.9 L963.7 134.9 L964.4 144.9 L965.0 161.6 L965.6 160.9 L966.3 167.8 L966.9 170.2 L967.5 162.2 L968.1 163.7 L968.8 164.9 L969.4 174.6 L970.0 174.0 L970.7 167.6 L971.3 160.8 L971.9 153.6 L972.6 153.3 L973.2 154.6 L973.8 151.1 L974.4 148.5 L975.1 146.9 L975.7 142.7 L976.3 136.7 L977.0 136.6 L977.6 141.0 L978.2 140.9 L978.8 146.6 L979.5 143.7 L980.1 147.8 L980.7 150.8 L981.4 148.0 L982.0 149.5 L982.6 143.4 L983.2 139.6 L983.9 142.9 L984.5 142.0 L985.1 144.4 L985.8 149.7 L986.4 148.4 L987.0 146.0 L987.7 144.7 L988.3 145.7 L988.9 147.8 L989.5 152.7 L990.2 146.6 L990.8 143.6 L991.4 143.3 L992.1 144.5 L992.7 144.1 L993.3 145.0 L993.9 147.9 L994.6 153.1 L995.2 153.4 L995.8 151.3 L996.5 147.9 L997.1 142.7 L997.7 140.5 L998.4 138.4 L999.0 138.9 L999.6 138.3 L1000.2 144.6 L1000.9 140.2 L1001.5 136.9 L1002.1 137.7 L1002.8 137.7 L1003.4 145.0 L1004.0 141.8 L1004.6 138.5 L1005.3 147.8 L1005.9 146.7 L1006.5 157.9 L1007.2 161.1 L1007.8 166.2 L1008.4 162.0 L1009.0 160.1 L1009.7 167.6 L1010.3 176.3 L1010.9 173.6 L1011.6 179.5 L1012.2 202.3 L1012.8 208.9 L1013.5 208.5 L1014.1 209.9 L1014.7 216.1 L1015.3 220.6 L1016.0 211.3 L1016.6 205.7 L1017.2 203.5 L1017.9 201.8 L1018.5 193.9 L1019.1 189.7 L1019.7 186.8 L1020.4 184.0 L1021.0 180.7 L1021.6 179.2 L1022.3 182.4 L1022.9 176.2 L1023.5 171.5 L1024.1 179.0 L1024.8 183.2 L1025.4 183.5 L1026.0 182.9 L1026.7 179.4 L1027.3 174.4 L1027.9 171.7 L1028.6 167.6 L1029.2 164.1 L1029.8 161.1 L1030.4 164.3 L1031.1 162.8 L1031.7 163.1 L1032.3 168.5 L1033.0 165.4 L1033.6 180.1 L1034.2 182.0 L1034.8 179.2 L1035.5 178.0 L1036.1 176.9 L1036.7 172.9 L1037.4 169.5 L1038.0 168.0 L1038.6 169.6 L1039.3 174.5 L1039.9 176.8 L1040.5 174.2 L1041.1 171.9 L1041.8 169.8 L1042.4 171.1 L1043.0 175.1 L1043.7 173.1 L1044.3 169.2 L1044.9 168.3 L1045.5 166.3 L1046.2 165.3 L1046.8 160.6 L1047.4 163.4 L1048.1 160.2 L1048.7 161.0 L1049.3 160.6 L1049.9 158.3 L1050.6 153.7 L1051.2 152.5 L1051.8 152.6 L1052.5 154.2 L1053.1 152.2 L1053.7 153.2 L1054.4 152.3 L1055.0 148.8 L1055.6 147.4 L1056.2 148.6 L1056.9 146.8 L1057.5 151.2 L1058.1 142.9 L1058.8 141.9 L1059.4 143.7 L1060.0 140.9 L1060.6 142.5 L1061.3 142.2 L1061.9 142.2 L1062.5 144.0 L1063.2 144.8 L1063.8 148.8 L1064.4 155.8 L1065.1 150.2 L1065.7 146.0 L1066.3 147.6 L1066.9 157.8 L1067.6 159.0 L1068.2 151.2 L1068.8 148.1 L1069.5 149.4 L1070.1 148.6 L1070.7 143.8 L1071.3 142.3 L1072.0 143.6 L1072.6 144.8 L1073.2 142.9 L1073.9 137.1 L1074.5 136.0 L1075.1 132.6 L1075.7 130.1 L1076.4 131.1 L1077.0 128.7 L1077.6 126.2 L1078.3 124.8 L1078.9 125.2 L1079.5 123.6 L1080.2 119.2 L1080.8 116.9 L1081.4 112.1 L1082.0 104.9 L1082.7 112.0 L1083.3 113.2 L1083.9 117.9 L1084.6 116.2 L1085.2 113.7 L1085.8 112.1 L1086.4 109.0 L1087.1 107.5 L1087.7 116.5 L1088.3 121.1 L1089.0 131.8 L1089.6 130.9 L1090.2 123.9 L1090.9 123.6 L1091.5 120.3 L1092.1 125.5 L1092.7 125.3 L1093.4 121.2 L1094.0 128.8 L1094.6 125.9 L1095.3 128.2 L1095.9 122.7 L1096.5 120.2 L1097.1 116.8 L1097.8 118.7 L1098.4 153.1 L1099.0 147.0 L1099.7 139.2 L1100.3 130.7 L1100.9 126.6 L1101.5 117.8 L1102.2 119.7 L1102.8 117.2 L1103.4 110.5 L1104.1 103.2 L1104.7 99.0 L1105.3 95.6 L1106.0 95.6 L1106.6 85.7 L1107.2 86.4 L1107.8 85.3 L1108.5 80.7 L1109.1 77.4 L1109.7 79.3 L1110.4 81.3 L1111.0 73.5 L1111.6 74.8 L1112.2 82.5 L1112.9 92.0 L1113.5 97.9 L1114.1 100.1 L1114.8 118.7 L1115.4 128.1 L1116.0 128.4 L1116.6 118.7 L1117.3 133.0 L1117.9 139.6 L1118.5 132.2 L1119.2 132.7 L1119.8 132.7 L1120.4 129.3 L1121.1 135.0 L1121.7 130.2 L1122.3 130.2 L1122.9 123.5 L1123.6 118.0 L1124.2 121.3 L1124.8 124.3 L1125.5 130.2 L1126.1 123.1 L1126.7 114.8 L1127.3 111.4 L1128.0 105.7 L1128.6 101.5 L1129.2 105.1 L1129.9 101.5 L1130.5 95.5 L1131.1 91.8 L1131.8 94.8 L1132.4 90.6 L1133.0 85.3 L1133.6 80.8 L1134.3 78.6 L1134.9 81.8 L1135.5 81.4 L1136.2 95.2 L1136.8 107.7 L1137.4 93.4 L1138.0 87.4 L1138.7 79.4 L1139.3 77.2 L1139.9 72.8 L1140.6 69.1 L1141.2 69.3 L1141.8 66.7 L1142.4 66.3 L1143.1 69.9 L1143.7 81.2 L1144.3 74.7 L1145.0 63.1 L1145.6 62.6"/><circle class="mark" cx="349.0" cy="268.5" r="4"/><text class="note" x="341.0" y="272.5" text-anchor="end">Dec 1920  4.8</text><circle class="mark" cx="415.0" cy="109.0" r="4"/><text class="note" x="423.0" y="103.0" text-anchor="start">Sep 1929  32.9</text><circle class="mark" cx="945.5" cy="41.3" r="4"/><text class="note" x="937.5" y="45.3" text-anchor="end">Dec 1999  44.9</text><circle class="mark" cx="1145.6" cy="62.7" r="4"/><text class="note" x="1137.6" y="52.7" text-anchor="end">Jun 2026  41.1</text></svg>
+      <figcaption class="caption">CAPE: the stock price divided by the average inflation-adjusted earnings of the last 10 years. High means stocks are expensive. Monthly, 1881 to June 2026. Source: <code>ie_data.xls</code>, shillerdata.com.</figcaption>
+    </figure>
+  </div>
+  <div class="container foot"><span>Foundations of Data Engineering &amp; Analytics, milestone 1: concept</span></div>
+</section>
+
+<section class="slide" id="s2" aria-labelledby="h2">
+  <div class="container">
+    <div class="motive">
+      <div>
+        <h2 id="h2">Short and long horizons need different signals</h2>
+        <div class="split" style="margin-top: var(--space-xl)">
+          <div>
+            <h3>Short term, 1 to 12 months</h3>
+            <dl>
+              <div><dt>What predicts</dt><dd>The recent trend (momentum) and how wildly prices swing (volatility)</dd></div>
+              <div><dt>Price level (P/E)</dt><dd>Says little about the next year</dd></div>
+              <div><dt>Risk</dt><dd>Calm and wild phases come in clusters; crashes come suddenly</dd></div>
+            </dl>
+          </div>
+          <div>
+            <h3>Long term, 5 to 10 years</h3>
+            <dl>
+              <div><dt>What predicts</dt><dd>Whether stocks are cheap or expensive (CAPE, P/E)</dd></div>
+              <div><dt>Earnings</dt><dd>Rise and fall in cycles of several years, then even out</dd></div>
+              <div><dt>Outcome</dt><dd>Usually a gain, even after inflation</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <figure class="photo">
+        <div data-slot="crash" data-alt="A crowd outside the New York Stock Exchange after the 1929 crash" style="aspect-ratio: 718 / 1024">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Crowd_outside_nyse.jpg" width="718" height="1024" alt="A crowd gathered outside the New York Stock Exchange after the crash of 1929">
+        </div>
+        <figcaption class="caption">Outside the New York Stock Exchange after the crash, 1929. Public domain, <a href="https://commons.wikimedia.org/wiki/File:Crowd_outside_nyse.jpg">Wikimedia Commons</a>.</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="container foot"><span>Motivation</span></div>
+</section>
+
+<section class="slide" id="s3" aria-labelledby="h3">
+  <div class="container">
+    <h2 id="h3">Our research question</h2>
+    <p class="question">How well can price level, recent trends, volatility and past crashes predict stock returns 1, 5 and 10 years ahead?</p>
+    <p class="lead">And does a rule-based strategy beat simply buying the index and holding it?</p>
+  </div>
+  <div class="container foot"><span>Research goal</span></div>
+</section>
+
+<section class="slide" id="s4" aria-labelledby="h4">
+  <div class="container">
+    <div class="motive">
+      <div>
+        <h2 id="h4">Five terms we use</h2>
+        <table style="margin-top: var(--space-xl)">
+          <tbody>
+            <tr><td class="name">Real return</td><td>Return after removing inflation, with dividends reinvested.</td></tr>
+            <tr><td class="name">P/E and CAPE</td><td>Price divided by earnings. CAPE uses the average earnings of the last 10 years. High means expensive.</td></tr>
+            <tr><td class="name">Momentum</td><td>How much the price rose or fell over the last 6 or 12 months.</td></tr>
+            <tr><td class="name">Volatility</td><td>How strongly the price swings from month to month.</td></tr>
+            <tr><td class="name">Drawdown</td><td>How far the price is below its previous high.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <figure class="photo">
+        <div data-slot="ticker" data-alt="Thomas Edison’s stock ticker, a glass-domed telegraph printer" style="aspect-ratio: 3070 / 3798">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Thomas_Edison_stock_ticker_NMAH-JN2014-3625.jpg/1280px-Thomas_Edison_stock_ticker_NMAH-JN2014-3625.jpg" width="3070" height="3798" alt="Thomas Edison’s stock ticker under a glass dome">
+        </div>
+        <figcaption class="caption">Edison’s stock ticker printed prices on paper tape until the internet took over. Photo: Jaclyn Nash, public domain, <a href="https://commons.wikimedia.org/wiki/File:Thomas_Edison_stock_ticker_NMAH-JN2014-3625.jpg">Wikimedia Commons</a>.</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="container foot"><span>Terms</span></div>
+</section>
+
+<section class="slide" id="s5" aria-labelledby="h5">
+  <div class="container">
+    <h2 id="h5">Three sub-questions, one per project phase</h2>
+    <table>
+      <thead><tr><th>Question</th><th>Phase</th><th>What we look at</th><th class="num">Points</th></tr></thead>
+      <tbody>
+        <tr><td class="name">How risky is each horizon?</td><td>RQ 1, exploratory analysis</td><td>How often you end with a gain after 1, 5 and 10 years, how long losses last, and why leveraged funds lose value over time.</td><td class="num">6</td></tr>
+        <tr><td class="name">Do simple rules work?</td><td>RQ 2, hypothesis tests</td><td>Does buying after a crash pay off? Do calm stocks give more return per unit of risk?</td><td class="num">2</td></tr>
+        <tr><td class="name">Can models predict returns?</td><td>RQ 3, machine learning</td><td>Predict real returns 1, 5 and 10 years ahead with linear models and tree ensembles.</td><td class="num">10</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="container foot"><span>Project structure</span></div>
+</section>
+
+<section class="slide" id="s6" aria-labelledby="h6">
+  <div class="container">
+    <h2 id="h6">What research already shows</h2>
+    <table>
+      <thead><tr><th>Work</th><th>Year</th><th>What they found</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Campbell and Shiller</td><td class="yr">1988, 1998</td><td>When stocks are expensive (high CAPE), the next 10 years tend to bring lower returns.</td></tr>
+        <tr><td class="name">Jegadeesh and Titman; Carhart</td><td class="yr">1993; 1997</td><td>Stocks that rose over the last 6 to 12 months tend to keep rising for a while.</td></tr>
+        <tr><td class="name">Blitz and van Vliet</td><td class="yr">2007</td><td>Calm, low-volatility stocks give more return per unit of risk.</td></tr>
+        <tr><td class="name">Bessembinder</td><td class="yr">2018</td><td>Most single stocks do worse than the index; a few huge winners carry it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="container foot"><span>Existing work</span></div>
+</section>
+
+<section class="slide" id="s7" aria-labelledby="h7">
+  <div class="container">
+    <div class="motive">
+      <div>
+        <h2 id="h7">Robert Shiller’s U.S. market data</h2>
+        <p class="lead" style="margin-block: var(--space-md) var(--space-lg)">One row per month from January 1871 to June 2026: more than 1,860 rows.</p>
+        <div class="sheet">
+          <table>
+            <thead><tr><th>Column</th><th>Meaning</th><th class="num">Jan 1871</th><th class="num">Jun 2026</th></tr></thead>
+            <tbody>
+              <tr><td class="yr">P</td><td>Stock index price (S&amp;P Composite, monthly average)</td><td class="num">4.44</td><td class="num">7,450.03</td></tr>
+              <tr><td class="yr">D</td><td>Dividends paid over the year</td><td class="num">0.26</td><td class="num">81.70</td></tr>
+              <tr><td class="yr">E</td><td>Company earnings over the year</td><td class="num">0.40</td><td class="num">295.39</td></tr>
+              <tr><td class="yr">CPI</td><td>Consumer price index, to remove inflation</td><td class="num">12.46</td><td class="num">333.95</td></tr>
+              <tr><td class="yr">GS10</td><td>Interest rate of 10-year U.S. government bonds, in %</td><td class="num">5.32</td><td class="num">4.47</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption">Later milestones may add daily S&amp;P 500 prices (<code>yfinance</code>) and Kenneth French’s factor data.</p>
+      </div>
+      <figure class="photo">
+        <div data-slot="shiller" data-alt="Portrait of Robert J. Shiller" style="aspect-ratio: 1526 / 1990">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Robert_J._Shiller_2017.jpg/1280px-Robert_J._Shiller_2017.jpg" width="1526" height="1990" alt="Robert J. Shiller in 2017" style="object-position: 50% 20%">
+        </div>
+        <figcaption class="caption">Robert J. Shiller, Yale economist, Nobel Prize 2013. Photo: Presidential Office Building, Taiwan, CC BY 2.0, <a href="https://commons.wikimedia.org/wiki/File:Robert_J._Shiller_2017.jpg">Wikimedia Commons</a>.</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="container foot"><span>Data</span></div>
+</section>
+
+<section class="slide" id="s8" aria-labelledby="h8">
+  <div class="container">
+    <h2 id="h8">Cleaning the data without cheating</h2>
+    <ol class="steps">
+      <li><h3>Fix the dates</h3><p>The file writes October 1871 as <code>1871.1</code>, the same as January. We restore <code>1871.10</code>.</p></li>
+      <li><h3>No peeking ahead</h3><p>Earnings are published about 3 months late, so each month only uses earnings from 3 months before (<var>E</var><sub><var>t</var>−3</sub>).</p></li>
+      <li><h3>Real total return</h3><p>Remove inflation with the CPI and count dividends (<var>D</var>/12 per month) as reinvested.</p></li>
+      <li><h3>Build the features</h3><p>Compute P/E, CAPE, 6 and 12 month momentum, volatility and drawdown.</p></li>
+    </ol>
+  </div>
+  <div class="container foot"><span>Preprocessing</span></div>
+</section>
+
+<section class="slide" id="s9" aria-labelledby="h9">
+  <div class="container">
+    <h2 id="h9">Models, baselines and a fair test</h2>
+    <div class="sheet">
+      <table>
+        <thead><tr><th>Part</th><th>Plan</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Linear models</td><td>Ridge, Lasso, ElasticNet</td><td>Simple and regularised, so they do not overfit noisy returns</td></tr>
+          <tr><td class="name">Tree ensembles</td><td>Random Forest, XGBoost</td><td>Catch non-linear patterns, like signals that only work in some market phases</td></tr>
+          <tr><td class="name">Validation</td><td>Walk-forward split with a gap</td><td>Always train on the past and test on the future; the gap keeps overlapping targets apart</td></tr>
+          <tr><td class="name">Baselines</td><td>Historical average; CAPE alone</td><td>Every model must beat these. Scored with RMSE, MAE, out-of-sample R² and AUC</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="container foot"><span>Method</span></div>
+</section>
+
+<section class="slide" id="s10" aria-labelledby="h10">
+  <div class="container">
+    <h2 id="h10">What could go wrong, and what we do about it</h2>
+    <div class="cols3">
+      <div><h3>Overlapping targets</h3><p>The 10-year returns of two neighbouring months share almost all their data. We leave gaps between training and test data.</p></div>
+      <div><h3>Averaged prices</h3><p>Monthly average prices smooth out returns (Working’s effect). We compare them with daily closing prices.</p></div>
+      <div><h3>Changing markets</h3><p>Markets in 1871 worked differently. We check whether the results still hold for data after 1926 alone.</p></div>
+    </div>
+    <div class="closing">
+      <p class="close">Thank you. Questions and feedback welcome.</p>
+      <figure class="photo">
+        <div data-slot="floor" data-alt="Brokers on the trading floor of the New York Stock Exchange, 1963" style="aspect-ratio: 4537 / 3004">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/NY_stock_exchange_traders_floor_LC-U9-10548-6.jpg/1280px-NY_stock_exchange_traders_floor_LC-U9-10548-6.jpg" width="4537" height="3004" alt="Stock brokers working on the trading floor of the New York Stock Exchange in 1963">
+        </div>
+        <figcaption class="caption">NYSE trading floor, 1963. Photo: Thomas J. O’Halloran, public domain, <a href="https://commons.wikimedia.org/wiki/File:NY_stock_exchange_traders_floor_LC-U9-10548-6.jpg">Wikimedia Commons</a>.</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="container foot"><span>Risks and limitations</span></div>
+</section>
+
+</main>
+<script>
+if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+document.addEventListener('keydown', (e) => {
+  const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+  if (!step) return;
+  e.preventDefault();
+  const slides = [...document.querySelectorAll('.slide')];
+  const i = slides.findIndex((s) => s.getBoundingClientRect().bottom > innerHeight / 2);
+  slides[Math.max(0, Math.min(slides.length - 1, i + step))].scrollIntoView();
+});
+</script>
+<script>window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
+document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });</script>
+</body>
+</html>
