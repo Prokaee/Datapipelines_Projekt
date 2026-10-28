@@ -29,6 +29,7 @@ Forschungsfrage: Wie gut sagen Bewertung (P/E, CAPE), Momentum, Volatilität und
 | `01_preprocessing.ipynb` / `.html` | Laden, Cleaning, Features, Zielwerte |
 | `data/raw/ie_data.xls` | Rohdaten, unverändert |
 | `data/shiller_clean.csv` | bereinigte Daten, Basis für EDA und Modelle |
+| `praesentation/index.html` / `deck.pdf` | Konzept-Präsentation (im Browser öffnen, F11, Pfeiltasten; PDF als Backup) |
 
 ## Deadlines (OLAT, jeweils 23:59)
 
