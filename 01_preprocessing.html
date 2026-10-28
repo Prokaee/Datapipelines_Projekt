@@ -7882,6 +7882,7 @@ our own result at the end of step 5.</p>
 <span class="n">raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
     <span class="s2">"data/raw/ie_data.xls"</span><span class="p">,</span>
     <span class="n">sheet_name</span><span class="o">=</span><span class="s2">"Data"</span><span class="p">,</span>
+    <span class="n">engine</span><span class="o">=</span><span class="s2">"calamine"</span><span class="p">,</span>       <span class="c1"># reads old .xls files (xlrd is deprecated)</span>
     <span class="n">skiprows</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>              <span class="c1"># skip the title rows</span>
     <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
