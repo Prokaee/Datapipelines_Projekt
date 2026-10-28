@@ -104,7 +104,3 @@ var { font-style: italic; font-family: var(--font-body); }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
-/* paper excerpts */
-.paper { margin: var(--space-md) 0 0; }
-.paper img { display: block; width: 100%; height: auto; max-height: 34svh; object-fit: contain; object-position: left top; background: var(--color-sheet); outline: var(--rule-hair) solid var(--color-rule-2); outline-offset: -1px; }
-@media print { .paper img { max-height: 2.3in; } #s6b .lead { font-size: var(--text-md); } #s6c .chart { max-height: 1.9in; } #s6c td { padding-block: var(--space-xs); } }
