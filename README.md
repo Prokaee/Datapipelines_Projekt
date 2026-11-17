@@ -20,15 +20,21 @@ Forschungsfrage: Wie gut sagen Bewertung (P/E, CAPE), Momentum, Volatilität und
 - Konzept (Google Doc): <https://docs.google.com/document/d/1FOaJ99wdJmuM_hL40cUTRf_Pdub8NUN0EDKZzbIuM78/edit?usp=sharing>
 - Präsentation Konzept (Google Slides): <https://docs.google.com/presentation/d/1dBuTkAMHYQ3pNvWY-ldbyVkEiVOrH2IF/edit?usp=sharing&ouid=108864958121520797417&rtpof=true&sd=true>
 - Repo: <https://github.com/Prokaee/Datapipelines_Projekt>
-- Daten: Robert Shiller, *U.S. Stock Markets 1871–Present*, <https://shillerdata.com/> (`ie_data.xls`, Stand 26.10.2026 in `data/raw/`)
+- Daten:
+  - Robert Shiller, *U.S. Stock Markets 1871–Present*, <https://shillerdata.com/> (`ie_data.xls`, Stand 26.10.2026 in `data/raw/`)
+  - Kenneth R. French Data Library, *Fama/French 3 Factors (1-Month U.S. Treasury Bill `RF`, 1926–2026)*, <https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html> (`F-F_Research_Data_Factors.csv` in `data/raw/`)
 
 ## Dateien
 
 | Datei | Inhalt |
 |---|---|
-| `01_preprocessing.ipynb` / `.html` | Laden, Cleaning, Features, Zielwerte |
-| `data/raw/ie_data.xls` | Rohdaten, unverändert |
-| `data/shiller_clean.csv` | bereinigte Daten, Basis für EDA und Modelle |
+| `01_preprocessing.ipynb` / `.html` | Laden, Cleaning, Inflations-, Anleihen- (10Y & 1M T-Bill) und Aktien-Indizes, Features, Zielwerte |
+| `02_eda.ipynb` / `.html` | Explorative Datenanalyse (uni-, bi- und multivariat, grafisch & nicht-grafisch, Implikationen für Feature Engineering & Modeling) |
+| `eda_utils.py` | Wiederverwendbare Plot-, Statistik- und Export-Hilfsfunktionen für die EDA |
+| `results/` | Direkt einsehbare EDA-Ergebnisse (`results/README.md`, `results/figures/*.png`, `results/tables/*.csv` & `*.md`) |
+| `data/raw/ie_data.xls` | Shiller-Rohdaten (1871–2026), unverändert |
+| `data/raw/F-F_Research_Data_Factors.csv` | Kenneth-French-Rohdaten inkl. 1M U.S. Treasury Bill Rate `RF` (1926–2026) |
+| `data/shiller_clean.csv` | Bereinigte Daten (1.866 Monate, 32 Spalten), Basis für EDA und Modelle |
 | `praesentation/index.html` / `deck.pdf` | Konzept-Präsentation (im Browser öffnen, F11, Pfeiltasten; PDF als Backup) |
 
 ## Deadlines (OLAT, jeweils 23:59)

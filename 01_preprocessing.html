@@ -7804,17 +7804,20 @@ a.anchor-link {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="Data-Preprocessing:-Shiller-U.S.-Stock-Market-Data">Data Preprocessing: Shiller U.S. Stock Market Data<a class="anchor-link" href="#Data-Preprocessing:-Shiller-U.S.-Stock-Market-Data">¶</a></h1><p><strong>Project:</strong> Multi-Horizon Stock Market Return Forecasting, Factor Premiums, and Drawdown Dynamics
 <strong>Team:</strong> Raphael Erler, Richard Zallinger, Michael Prokop</p>
-<p><strong>What this notebook does in one sentence:</strong> it takes a messy Excel file with U.S. stock market
-data since 1871 and turns it into one clean table that all later notebooks use.</p>
+<p><strong>What this notebook does in one sentence:</strong> it takes raw U.S. stock market and Treasury data
+and turns them into one clean, point-in-time table (<code>data/shiller_clean.csv</code>) that all later notebooks use.</p>
 <p>Steps:</p>
 <ol>
 <li>Open the Excel file</li>
 <li>Repair the date column</li>
 <li>Check the data for errors</li>
 <li>Don't cheat: only use information that was really known at the time</li>
-<li>Remove inflation and add dividends</li>
+<li>Remove inflation and add dividends (stock total returns)
+5b. Add 10-year government bonds and 1-month Treasury bills (refined for EDA &amp; benchmarking)</li>
 <li>Compute the hints the model will use (features)</li>
 <li>Compute the answers the model should predict (targets)</li>
+<li>Check empty cells at the start and the end</li>
+<li>Known weaknesses of the data (bias and limitations)</li>
 <li>Save the clean table</li>
 </ol>
 </div>
@@ -7863,8 +7866,8 @@ the columns we need:</p>
 </tbody>
 </table>
 <p>Shiller also offers ready-made columns (e.g. inflation-adjusted prices). We do <strong>not</strong> use them,
-because we want to compute everything ourselves and show how. We keep one of them only to check
-our own result at the end of step 5.</p>
+because we want to compute everything ourselves and show how. We keep two of them (<code>shiller_tr_price</code> and <code>shiller_bond_tr_real</code>) only to check
+our own stock and bond total return calculations in steps 5 and 5b.</p>
 </div>
 </div>
 </div>
@@ -7885,8 +7888,8 @@ our own result at the end of step 5.</p>
     <span class="n">engine</span><span class="o">=</span><span class="s2">"calamine"</span><span class="p">,</span>       <span class="c1"># reads old .xls files (xlrd is deprecated)</span>
     <span class="n">skiprows</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>              <span class="c1"># skip the title rows</span>
     <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
-    <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">"date_raw"</span><span class="p">,</span> <span class="s2">"P"</span><span class="p">,</span> <span class="s2">"D"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">,</span> <span class="s2">"CPI"</span><span class="p">,</span> <span class="s2">"GS10"</span><span class="p">,</span> <span class="s2">"shiller_tr_price"</span><span class="p">],</span>
+    <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">18</span><span class="p">],</span>
+    <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">"date_raw"</span><span class="p">,</span> <span class="s2">"P"</span><span class="p">,</span> <span class="s2">"D"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">,</span> <span class="s2">"CPI"</span><span class="p">,</span> <span class="s2">"GS10"</span><span class="p">,</span> <span class="s2">"shiller_tr_price"</span><span class="p">,</span> <span class="s2">"shiller_bond_tr_real"</span><span class="p">],</span>
     <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">"date_raw"</span><span class="p">:</span> <span class="nb">str</span><span class="p">},</span>  <span class="c1"># read the date as text, see step 2</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -7903,7 +7906,7 @@ our own result at the end of step 5.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>(1871, 7)
+<pre>(1871, 8)
 </pre>
 </div>
 </div>
@@ -7935,6 +7938,7 @@ our own result at the end of step 5.</p>
 <th>CPI</th>
 <th>GS10</th>
 <th>shiller_tr_price</th>
+<th>shiller_bond_tr_real</th>
 </tr>
 </thead>
 <tbody>
@@ -7947,6 +7951,7 @@ our own result at the end of step 5.</p>
 <td>333.918</td>
 <td>4.6</td>
 <td>5.131772e+06</td>
+<td>39.147877</td>
 </tr>
 <tr>
 <th>1867</th>
@@ -7957,6 +7962,7 @@ our own result at the end of step 5.</p>
 <td>334.98</td>
 <td>4.68</td>
 <td>5.272759e+06</td>
+<td>38.926051</td>
 </tr>
 <tr>
 <th>1868</th>
@@ -7967,6 +7973,7 @@ our own result at the end of step 5.</p>
 <td>335.511</td>
 <td>4.99</td>
 <td>5.235803e+06</td>
+<td>38.075098</td>
 </tr>
 <tr>
 <th>1869</th>
@@ -7977,6 +7984,7 @@ our own result at the end of step 5.</p>
 <td>335.7765</td>
 <td>5.24</td>
 <td>5.268026e+06</td>
+<td>37.468818</td>
 </tr>
 <tr>
 <th>1870</th>
@@ -7986,6 +7994,7 @@ our own result at the end of step 5.</p>
 <td>NaN</td>
 <td>Sept/Oct CPI estimated</td>
 <td>Oct GS10 is Oct 2nd value</td>
+<td>NaN</td>
 <td>NaN</td>
 </tr>
 </tbody>
@@ -8022,7 +8031,7 @@ We tell Python they are numbers.</li>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">"date_raw"</span><span class="p">])</span>
-<span class="n">value_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"P"</span><span class="p">,</span> <span class="s2">"D"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">,</span> <span class="s2">"CPI"</span><span class="p">,</span> <span class="s2">"GS10"</span><span class="p">,</span> <span class="s2">"shiller_tr_price"</span><span class="p">]</span>
+<span class="n">value_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"P"</span><span class="p">,</span> <span class="s2">"D"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">,</span> <span class="s2">"CPI"</span><span class="p">,</span> <span class="s2">"GS10"</span><span class="p">,</span> <span class="s2">"shiller_tr_price"</span><span class="p">,</span> <span class="s2">"shiller_bond_tr_real"</span><span class="p">]</span>
 <span class="n">raw</span><span class="p">[</span><span class="n">value_cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="n">value_cols</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 <span class="n">raw</span><span class="o">.</span><span class="n">dtypes</span>
 </pre></div>
@@ -8037,13 +8046,14 @@ We tell Python they are numbers.</li>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>date_raw                str
-P                   float64
-D                   float64
-E                   float64
-CPI                 float64
-GS10                float64
-shiller_tr_price    float64
+<pre>date_raw                    str
+P                       float64
+D                       float64
+E                       float64
+CPI                     float64
+GS10                    float64
+shiller_tr_price        float64
+shiller_bond_tr_real    float64
 dtype: object</pre>
 </div>
 </div>
@@ -8135,9 +8145,11 @@ The old text column <code>date_raw</code> is no longer needed and is removed.</p
 <th>CPI</th>
 <th>GS10</th>
 <th>shiller_tr_price</th>
+<th>shiller_bond_tr_real</th>
 </tr>
 <tr>
 <th>date</th>
+<th></th>
 <th></th>
 <th></th>
 <th></th>
@@ -8155,6 +8167,7 @@ The old text column <code>date_raw</code> is no longer needed and is removed.</p
 <td>12.464061</td>
 <td>5.320000</td>
 <td>119.611709</td>
+<td>1.000000</td>
 </tr>
 <tr>
 <th>1871-02-01</th>
@@ -8164,6 +8177,7 @@ The old text column <code>date_raw</code> is no longer needed and is removed.</p
 <td>12.844641</td>
 <td>5.323333</td>
 <td>118.202554</td>
+<td>0.974424</td>
 </tr>
 <tr>
 <th>1871-03-01</th>
@@ -8173,6 +8187,7 @@ The old text column <code>date_raw</code> is no longer needed and is removed.</p
 <td>13.034972</td>
 <td>5.326667</td>
 <td>119.884635</td>
+<td>0.964209</td>
 </tr>
 <tr>
 <th>1871-04-01</th>
@@ -8182,6 +8197,7 @@ The old text column <code>date_raw</code> is no longer needed and is removed.</p
 <td>12.559226</td>
 <td>5.330000</td>
 <td>128.519432</td>
+<td>1.004919</td>
 </tr>
 <tr>
 <th>1871-05-01</th>
@@ -8191,6 +8207,7 @@ The old text column <code>date_raw</code> is no longer needed and is removed.</p
 <td>12.273812</td>
 <td>5.333333</td>
 <td>135.438463</td>
+<td>1.032591</td>
 </tr>
 </tbody>
 </table>
@@ -8268,12 +8285,13 @@ Period: 1871-01-01 to 2026-10-01 (1870 months)
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>Empty cells per column:
-P                   0
-D                   4
-E                   4
-CPI                 0
-GS10                0
-shiller_tr_price    0
+P                       0
+D                       4
+E                       4
+CPI                     0
+GS10                    0
+shiller_tr_price        0
+shiller_bond_tr_real    0
 dtype: int64
 </pre>
 </div>
@@ -8305,9 +8323,11 @@ dtype: int64
 <th>CPI</th>
 <th>GS10</th>
 <th>shiller_tr_price</th>
+<th>shiller_bond_tr_real</th>
 </tr>
 <tr>
 <th>date</th>
+<th></th>
 <th></th>
 <th></th>
 <th></th>
@@ -8325,6 +8345,7 @@ dtype: int64
 <td>333.9180</td>
 <td>4.60</td>
 <td>5.131772e+06</td>
+<td>39.147877</td>
 </tr>
 <tr>
 <th>2026-08-01</th>
@@ -8334,6 +8355,7 @@ dtype: int64
 <td>334.9800</td>
 <td>4.68</td>
 <td>5.272759e+06</td>
+<td>38.926051</td>
 </tr>
 <tr>
 <th>2026-09-01</th>
@@ -8343,6 +8365,7 @@ dtype: int64
 <td>335.5110</td>
 <td>4.99</td>
 <td>5.235803e+06</td>
+<td>38.075098</td>
 </tr>
 <tr>
 <th>2026-10-01</th>
@@ -8352,6 +8375,7 @@ dtype: int64
 <td>335.7765</td>
 <td>5.24</td>
 <td>5.268026e+06</td>
+<td>37.468818</td>
 </tr>
 </tbody>
 </table>
@@ -8687,6 +8711,14 @@ We assume the dividends are invested again right away. Return including dividend
 <span class="n">df</span><span class="p">[</span><span class="s2">"P_real"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"P"</span><span class="p">]</span> <span class="o">*</span> <span class="n">cpi_today</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">"E_lag_real"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"E_lag"</span><span class="p">]</span> <span class="o">*</span> <span class="n">cpi_today</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span>
 
+<span class="c1"># Monthly and rolling 1-year CPI inflation</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"inf_mom"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"inf_1y"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="c1"># Nominal and real stock total returns + cumulative wealth indices</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"ret_nom"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"P"</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">"D"</span><span class="p">]</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"P"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"tr_index_nom"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ret_nom"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+
 <span class="n">df</span><span class="p">[</span><span class="s2">"ret_real"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"P"</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">"D"</span><span class="p">]</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"P"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">"tr_index"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ret_real"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
 
@@ -8714,7 +8746,7 @@ Do the monthly changes match? Correlation: 1.0
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8c101e82">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9f148a98">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8722,6 +8754,115 @@ Do the monthly changes match? Correlation: 1.0
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>Our result is the same as Shiller's own calculation (correlation 1.0 means a perfect match),
 so our formula is correct.</p>
+<h2 id="5b.-Add-10-year-government-bonds-and-1-month-Treasury-bills-(EDA-refinement)">5b. Add 10-year government bonds and 1-month Treasury bills (EDA refinement)<a class="anchor-link" href="#5b.-Add-10-year-government-bonds-and-1-month-Treasury-bills-(EDA-refinement)">¶</a></h2><p>During Exploratory Data Analysis (<code>02_eda.ipynb</code>), looking at stocks alone is not enough:
+investors always compare stocks against <strong>10-year U.S. government bonds</strong> and <strong>1-month U.S. Treasury bills</strong> (money market cash) to measure the <strong>Term Premium</strong> and the <strong>Equity Risk Premium (ERP)</strong>, as well as how inflation affects each asset class. Following Section 3.2 of the project specification (<em>fine-tuning preprocessing when EDA requires additional series</em>), we build total return indices for both fixed-income benchmarks:</p>
+<ol>
+<li><p><strong>10-Year U.S. Government Bonds (1871–2026, derived from <code>GS10</code>):</strong>
+Each month $t-1$, we buy a 10-year (120-month) par government bond with annual coupon $y_{t-1} = GS10_{t-1}/100$ (monthly coupon $y_{t-1}/12$). One month later at $t$, the bond has 119 months left and is repriced at the new market yield $y_t = GS10_t/100$:
+$$1 + r^{\text{bond10y, nom}}_t = \frac{y_{t-1}}{12} + \frac{y_{t-1}}{y_t}\left(1 - \left(1 + \frac{y_t}{12}\right)^{-119}\right) + \left(1 + \frac{y_t}{12}\right)^{-119}$$
+Multiplying by $CPI_{t-1} / CPI_t$ gives the real monthly bond return (<code>ret_bond10y_real</code>), which we verify against Shiller's own bond return index.</p>
+</li>
+<li><p><strong>1-Month U.S. Treasury Bills / Money Market (July 1926–June 2026, Kenneth French Data Library):</strong>
+Shiller's spreadsheet has no short-term money market rate. We load the monthly 1-month U.S. Treasury bill rate (<code>RF</code>, compiled from CRSP / Ibbotson Associates and ICE BofA 1-Month U.S. Treasury Bill Index) archived in <code>data/raw/F-F_Research_Data_Factors.csv</code>. It starts in July 1926 (<code>1926-07-01</code>), providing an unbroken 100-year (1,200-month) money market benchmark (<code>tbill1m_tr_nom</code> and <code>tbill1m_tr_real</code>, anchored at <code>1.0</code> in <code>1926-06-01</code>). Months before mid-1926 stay <code>NaN</code> rather than inventing risk-free bill rates before modern U.S. Treasury bills existed.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=765b0572">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># 1. 10-Year U.S. Government Bond monthly returns and total return indices (1871-2026)</span>
+<span class="n">y_prev</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"GS10"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">100.0</span>
+<span class="n">y_curr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"GS10"</span><span class="p">]</span> <span class="o">/</span> <span class="mf">100.0</span>
+<span class="n">gross_bond_nom</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">y_prev</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">)</span>
+    <span class="o">+</span> <span class="p">(</span><span class="n">y_prev</span> <span class="o">/</span> <span class="n">y_curr</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">y_curr</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">119</span><span class="p">))</span>
+    <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">y_curr</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">119</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"ret_bond10y_nom"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gross_bond_nom</span> <span class="o">-</span> <span class="mf">1.0</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"ret_bond10y_real"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gross_bond_nom</span> <span class="o">*</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">])</span> <span class="o">-</span> <span class="mf">1.0</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"bond10y_tr_nom"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ret_bond10y_nom"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"bond10y_tr_real"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ret_bond10y_real"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+
+<span class="n">bond_check</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"shiller_bond_tr_real"</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"shiller_bond_tr_real"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">"1 dollar from 1871 in 10Y bonds is worth today (real) - ours:"</span><span class="p">,</span>
+    <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"bond10y_tr_real"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="s2">" Shiller:"</span><span class="p">,</span>
+    <span class="nb">round</span><span class="p">(</span><span class="n">bond_check</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">"Do monthly real 10Y bond returns match Shiller? Correlation:"</span><span class="p">,</span>
+    <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"bond10y_tr_real"</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">bond_check</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()),</span> <span class="mi">4</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># 2. 1-Month U.S. Treasury Bill (Money Market) returns and total return indices (1926-2026)</span>
+<span class="n">ff_rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"data/raw/F-F_Research_Data_Factors.csv"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"latin1"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">6</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">and</span> <span class="s2">","</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+            <span class="n">parts_ff</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts_ff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>  <span class="c1"># monthly YYYYMM rows only</span>
+                <span class="n">ff_rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">parts_ff</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">parts_ff</span><span class="p">[</span><span class="mi">4</span><span class="p">])))</span>
+
+<span class="n">ff</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ff_rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"ym"</span><span class="p">,</span> <span class="s2">"rf_pct"</span><span class="p">])</span>
+<span class="n">ff</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="s2">"ym"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"01"</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">ff</span> <span class="o">=</span> <span class="n">ff</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"date"</span><span class="p">)</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s2">"ret_tbill1m_nom"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ff</span><span class="p">[</span><span class="s2">"rf_pct"</span><span class="p">]</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">/</span> <span class="mf">100.0</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"ret_tbill1m_real"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ret_tbill1m_nom"</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">"CPI"</span><span class="p">])</span> <span class="o">-</span> <span class="mf">1.0</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s2">"tbill1m_tr_nom"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"tbill1m_tr_real"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"1926-06-01"</span><span class="p">,</span> <span class="s2">"tbill1m_tr_nom"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"1926-06-01"</span><span class="p">,</span> <span class="s2">"tbill1m_tr_real"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"1926-07-01"</span><span class="p">:,</span> <span class="s2">"tbill1m_tr_nom"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"1926-07-01"</span><span class="p">:,</span> <span class="s2">"ret_tbill1m_nom"</span><span class="p">])</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"1926-07-01"</span><span class="p">:,</span> <span class="s2">"tbill1m_tr_real"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"1926-07-01"</span><span class="p">:,</span> <span class="s2">"ret_tbill1m_real"</span><span class="p">])</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"1M T-Bill coverage: </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">'ret_tbill1m_nom'</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> to "</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">'ret_tbill1m_nom'</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> "</span>
+    <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">'ret_tbill1m_nom'</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> months = 100.0 years)"</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"1 dollar from June 1926 in 1M T-Bills -&gt; nominal: $</span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">'tbill1m_tr_nom'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, "</span>
+    <span class="sa">f</span><span class="s2">"real: $</span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">'tbill1m_tr_real'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>1 dollar from 1871 in 10Y bonds is worth today (real) - ours: 39.4  Shiller: 39.4
+Do monthly real 10Y bond returns match Shiller? Correlation: 1.0
+1M T-Bill coverage: 1926-07-01 to 2026-06-01 (1200 months = 100.0 years)
+1 dollar from June 1926 in 1M T-Bills -&gt; nominal: $25.37, real: $1.34
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8c101e82">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="6.-Compute-the-hints-the-model-will-use-(features)">6. Compute the hints the model will use (features)<a class="anchor-link" href="#6.-Compute-the-hints-the-model-will-use-(features)">¶</a></h2><p>These are the numbers the model will look at to guess the future. Each one only uses data from
 the past (see step 4).</p>
 <table>
@@ -8788,7 +8929,7 @@ the highest value so far was reached in August 2000:</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">tr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"tr_index"</span><span class="p">]</span>
@@ -8812,7 +8953,7 @@ the highest value so far was reached in August 2000:</p>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8952,7 +9093,7 @@ For the most recent months the answer does not exist yet (the future has not hap
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">years</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]:</span>
@@ -8971,7 +9112,7 @@ For the most recent months the answer does not exist yet (the future has not hap
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9076,7 +9217,7 @@ removes only the rows it cannot use.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">features</span> <span class="o">+</span> <span class="n">targets</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">"empty cells"</span><span class="p">)</span>
@@ -9090,7 +9231,7 @@ removes only the rows it cannot use.</p>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9166,7 +9307,7 @@ removes only the rows it cannot use.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">first_full</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
@@ -9237,11 +9378,18 @@ mix up the time order.</li>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">"P"</span><span class="p">,</span> <span class="s2">"D"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">,</span> <span class="s2">"CPI"</span><span class="p">,</span> <span class="s2">"GS10"</span><span class="p">,</span> <span class="s2">"E_lag"</span><span class="p">,</span> <span class="s2">"D_lag"</span><span class="p">,</span> <span class="s2">"P_real"</span><span class="p">,</span> <span class="s2">"ret_real"</span><span class="p">,</span> <span class="s2">"tr_index"</span><span class="p">]</span>
-         <span class="o">+</span> <span class="n">features</span> <span class="o">+</span> <span class="n">targets</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Keep the original 20 columns first, followed by the newly added inflation and bond/T-bill columns</span>
+<span class="n">orig_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"P"</span><span class="p">,</span> <span class="s2">"D"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">,</span> <span class="s2">"CPI"</span><span class="p">,</span> <span class="s2">"GS10"</span><span class="p">,</span> <span class="s2">"E_lag"</span><span class="p">,</span> <span class="s2">"D_lag"</span><span class="p">,</span> <span class="s2">"P_real"</span><span class="p">,</span> <span class="s2">"ret_real"</span><span class="p">,</span> <span class="s2">"tr_index"</span><span class="p">]</span> <span class="o">+</span> <span class="n">features</span> <span class="o">+</span> <span class="n">targets</span>
+<span class="n">extra_eda_cols</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"inf_mom"</span><span class="p">,</span> <span class="s2">"inf_1y"</span><span class="p">,</span>
+    <span class="s2">"ret_nom"</span><span class="p">,</span> <span class="s2">"tr_index_nom"</span><span class="p">,</span>
+    <span class="s2">"ret_bond10y_nom"</span><span class="p">,</span> <span class="s2">"ret_bond10y_real"</span><span class="p">,</span> <span class="s2">"bond10y_tr_nom"</span><span class="p">,</span> <span class="s2">"bond10y_tr_real"</span><span class="p">,</span>
+    <span class="s2">"ret_tbill1m_nom"</span><span class="p">,</span> <span class="s2">"ret_tbill1m_real"</span><span class="p">,</span> <span class="s2">"tbill1m_tr_nom"</span><span class="p">,</span> <span class="s2">"tbill1m_tr_real"</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">orig_cols</span> <span class="o">+</span> <span class="n">extra_eda_cols</span><span class="p">]</span>
 <span class="n">out</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"data/shiller_clean.csv"</span><span class="p">,</span> <span class="n">index_label</span><span class="o">=</span><span class="s2">"date"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">out</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -9257,12 +9405,12 @@ mix up the time order.</li>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>(1866, 20)
+<pre>(1866, 32)
 </pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9292,19 +9440,21 @@ mix up the time order.</li>
 <th>P_real</th>
 <th>ret_real</th>
 <th>tr_index</th>
-<th>mom_6m</th>
-<th>mom_12m</th>
-<th>vol_12m</th>
-<th>pe</th>
-<th>cape</th>
-<th>yield_gap</th>
-<th>drawdown</th>
-<th>fwd_ret_1y</th>
-<th>fwd_ret_5y</th>
-<th>fwd_ret_10y</th>
+<th>...</th>
+<th>ret_nom</th>
+<th>tr_index_nom</th>
+<th>ret_bond10y_nom</th>
+<th>ret_bond10y_real</th>
+<th>bond10y_tr_nom</th>
+<th>bond10y_tr_real</th>
+<th>ret_tbill1m_nom</th>
+<th>ret_tbill1m_real</th>
+<th>tbill1m_tr_nom</th>
+<th>tbill1m_tr_real</th>
 </tr>
 <tr>
 <th>date</th>
+<th></th>
 <th></th>
 <th></th>
 <th></th>
@@ -9340,16 +9490,17 @@ mix up the time order.</li>
 <td>6976.477714</td>
 <td>0.037663</td>
 <td>39931.265758</td>
-<td>0.014554</td>
-<td>0.263193</td>
-<td>0.105291</td>
-<td>28.090546</td>
-<td>38.965658</td>
-<td>-0.007601</td>
-<td>-0.016507</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>...</td>
+<td>0.046484</td>
+<td>1.066900e+06</td>
+<td>-0.002096</td>
+<td>-0.010508</td>
+<td>1060.755647</td>
+<td>39.701289</td>
+<td>0.0029</td>
+<td>-0.005553</td>
+<td>25.223317</td>
+<td>1.340618</td>
 </tr>
 <tr>
 <th>2026-05-01</th>
@@ -9363,16 +9514,17 @@ mix up the time order.</li>
 <td>7386.650270</td>
 <td>0.059761</td>
 <td>42317.592673</td>
-<td>0.069708</td>
-<td>0.238207</td>
-<td>0.093243</td>
-<td>29.103830</td>
-<td>41.001635</td>
-<td>-0.010440</td>
-<td>0.000000</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>...</td>
+<td>0.066453</td>
+<td>1.137799e+06</td>
+<td>-0.009192</td>
+<td>-0.015410</td>
+<td>1051.005223</td>
+<td>39.089509</td>
+<td>0.0031</td>
+<td>-0.003195</td>
+<td>25.301510</td>
+<td>1.336335</td>
 </tr>
 <tr>
 <th>2026-06-01</th>
@@ -9386,19 +9538,21 @@ mix up the time order.</li>
 <td>7450.032857</td>
 <td>0.009502</td>
 <td>42719.712978</td>
-<td>0.060953</td>
-<td>0.207385</td>
-<td>0.091672</td>
-<td>28.465335</td>
-<td>41.083693</td>
-<td>-0.009570</td>
-<td>0.000000</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>...</td>
+<td>0.005975</td>
+<td>1.144598e+06</td>
+<td>0.004533</td>
+<td>0.008056</td>
+<td>1055.769640</td>
+<td>39.404398</td>
+<td>0.0029</td>
+<td>0.006417</td>
+<td>25.374884</td>
+<td>1.344910</td>
 </tr>
 </tbody>
 </table>
+<p>3 rows × 32 columns</p>
 </div>
 </div>
 </div>

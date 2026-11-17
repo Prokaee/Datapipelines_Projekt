@@ -1,0 +1,13 @@
+dimension,category,months,share_pct
+Macroeconomic Era,1. Pre-1926 (Gold Standard / Early),665,35.64
+Macroeconomic Era,2. 1926–1981 (Rising Yields & Great Inflation),664,35.58
+Macroeconomic Era,3. 1981–2020 (Disinflation & Rate Bull Market),471,25.24
+Macroeconomic Era,4. 2021–2026 (Post-COVID Inflation Reset),66,3.54
+1Y Inflation Regime,Deflation (< 0%),415,22.38
+1Y Inflation Regime,Low Inflation (0–3%),699,37.7
+1Y Inflation Regime,Moderate Inflation (3–6%),395,21.31
+1Y Inflation Regime,High Inflation (>= 6%),345,18.61
+CAPE Valuation Regime,Cheap (CAPE < 12),422,24.2
+CAPE Valuation Regime,Fair (12 <= CAPE < 18),603,34.58
+CAPE Valuation Regime,Expensive (18 <= CAPE < 25),424,24.31
+CAPE Valuation Regime,Bubble / Very Expensive (CAPE >= 25),295,16.92

@@ -1,0 +1,8 @@
+# Rolling 10-Year Investment Outcomes: 10Y Bonds & Stocks vs. 1M T-Bills
+
+| comparison_10y_horizon                                                  | n_10y_windows | win_rate_pct | mean_spread_pa_pct | median_spread_pa_pct | min_spread_pa_pct | max_spread_pa_pct | mean_10y_real_gain_per_100usd | median_10y_real_gain_per_100usd |
+| ----------------------------------------------------------------------- | ------------- | ------------ | ------------------ | -------------------- | ----------------- | ----------------- | ----------------------------- | ------------------------------- |
+| Term Premium: 10Y Bonds vs. 1M T-Bills (All 1926–2016 starts)           | 1081          | 70.31        | 1.68               | 1.97                 | -4.54             | 7.29              | 22.62                         | 19.05                           |
+| Term Premium: Pre-Peak Starts (1926–1971, ending <= 1981)               | 544           | 56.80        | 0.62               | 0.23                 | -4.46             | 3.85              | 7.02                          | 2.33                            |
+| Term Premium: Disinflation Starts (1981–2016, ending <= 2026)           | 418           | 89.95        | 3.32               | 3.52                 | -1.92             | 7.29              | 44.61                         | 42.73                           |
+| Equity Risk Premium (ERP): Stocks vs. 1M T-Bills (All 1926–2016 starts) | 1081          | 85.57        | 6.96               | 7.07                 | -6.44             | 19.04             | 116.41                        | 103.58                          |

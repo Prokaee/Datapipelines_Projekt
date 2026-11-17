@@ -1,0 +1,9 @@
+# Point-to-Point Realized Term Premium and ERP Across Interest-Rate Regimes
+
+| regime_window                                          | years  | tbill_real_1usd | bond10y_real_1usd | stocks_real_1usd | tbill_real_cagr_pct | bond10y_real_cagr_pct | realized_term_premium_pa_pct | realized_erp_pa_pct |
+| ------------------------------------------------------ | ------ | --------------- | ----------------- | ---------------- | ------------------- | --------------------- | ---------------------------- | ------------------- |
+| 1926-06 to 1981-09 (Rising-Yield Era to 15.32% Peak)   | 55.25  | 0.95            | 0.93              | 23.89            | -0.09               | -0.13                 | -0.05                        | 6.00                |
+| 1941-01 to 1981-09 (40-Year Bond Bear Market)          | 40.67  | 0.63            | 0.42              | 10.16            | -1.12               | -2.12                 | -1.01                        | 6.98                |
+| 1981-09 to 2020-07 (Secular Falling-Yield Bull Market) | 38.83  | 1.53            | 8.77              | 25.61            | 1.10                | 5.75                  | 4.65                         | 7.61                |
+| 2020-07 to 2026-06 (Post-COVID Rate Reset)             | 5.92   | 0.92            | 0.67              | 1.96             | -1.35               | -6.64                 | -5.28                        | 13.40               |
+| Full 100 Years: 1926-06 to 2026-06                     | 100.00 | 1.34            | 5.43              | 1199.00          | 0.30                | 1.71                  | 1.41                         | 7.05                |

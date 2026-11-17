@@ -1,0 +1,6 @@
+period,years,cpi_start,cpi_end,price_multiple,annualized_inflation_cagr_pct,rolling_1y_std_pct
+Full Sample (Jan 1871 – Jun 2026),155.42,12.46,333.95,26.79,2.14,5.76
+Classical Gold Standard (Jan 1871 – Dec 1913),42.92,12.46,10.0,0.8,-0.51,7.01
+Federal Reserve Era (Dec 1913 – Jun 2026),112.5,10.0,333.95,33.4,3.17,4.88
+Modern T-Bill Sample (Jun 1926 – Jun 2026),100.0,17.7,333.95,18.87,2.98,3.93
+Post-Bretton Woods Fiat Era (Aug 1971 – Jun 2026),54.83,40.8,333.95,8.19,3.91,2.91

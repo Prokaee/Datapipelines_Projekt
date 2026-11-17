@@ -35,7 +35,7 @@ Each instance (row) represents a single, discrete calendar month of aggregated m
 * **Intra-Month Sampling:** Price observations ($P$) represent the arithmetic average of daily closing prices during the calendar month, rather than instantaneous month-end closing prices.
 
 ### What data does each instance consist of? "Raw" data or features?
-Each instance consists of 20 continuous numerical attributes (plus a primary datetime index):
+Each instance consists of 32 continuous numerical attributes (plus a primary datetime index):
 1. **Raw / Base Macroeconomic Variables (from `ie_data.xls`):**
    * `P` (*float64*): S&P Composite Index nominal price (monthly average of daily closing prices). Range: [2.73, 7,450.03].
    * `D` (*float64*): Nominal dividends per share, expressed as a 12-month trailing moving total. Range: [0.18, 81.70].
@@ -61,6 +61,11 @@ Each instance consists of 20 continuous numerical attributes (plus a primary dat
    * `fwd_ret_1y` (*float64*): 1-year forward annualized real total return: $\left(\frac{TR_{t+12}}{TR_t}\right)^{1} - 1$.
    * `fwd_ret_5y` (*float64*): 5-year forward annualized real total return: $\left(\frac{TR_{t+60}}{TR_t}\right)^{12/60} - 1$.
    * `fwd_ret_10y` (*float64*): 10-year forward annualized real total return: $\left(\frac{TR_{t+120}}{TR_t}\right)^{12/120} - 1$.
+6. **Inflation & Fixed-Income Benchmark Series (Added for EDA & Excess-Return Benchmarking):**
+   * `inf_mom`, `inf_1y` (*float64*): 1-month ($\frac{CPI_t}{CPI_{t-1}} - 1$) and rolling 12-month ($\frac{CPI_t}{CPI_{t-12}} - 1$) CPI inflation rates.
+   * `ret_nom`, `tr_index_nom` (*float64*): Monthly nominal stock total return and cumulative nominal stock wealth index ($1.0$ at 1871-01-01).
+   * `ret_bond10y_nom`, `ret_bond10y_real`, `bond10y_tr_nom`, `bond10y_tr_real` (*float64*): Monthly nominal and real total returns and cumulative total return wealth indices ($1.0$ at 1871-01-01; real terminal value $39.40$ at 2026-06-01) for 10-year par U.S. government bonds derived from `GS10` and `CPI`, verified 1:1 against Shiller's bond return column.
+   * `ret_tbill1m_nom`, `ret_tbill1m_real`, `tbill1m_tr_nom`, `tbill1m_tr_real` (*float64*): Monthly nominal and real returns and cumulative total return wealth indices ($1.0$ at 1926-06-01; real terminal value $1.34$, nominal $25.37$ at 2026-06-01) for 1-month U.S. Treasury bills from Kenneth R. French's Data Library (`F-F_Research_Data_Factors.csv`, CRSP/Ibbotson Associates & ICE BofA 1-Month Treasury Bill Index, July 1926–June 2026; `NaN` prior to mid-1926).
 
 #### Summary Statistics of the Clean Dataset (`shiller_clean.csv`, N=1,866)
 
@@ -179,11 +184,11 @@ Yes. The entire data engineering pipeline was implemented in `01_preprocessing.i
    ├─► 3. Data Integrity & Completeness Check (Verify 0 duplicate/missing calendar months)
    ├─► 4. Terminal Unreleased Fundamentals Pruning (Drop 2026-07 to 2026-10 with NaN in E/D)
    ├─► 5. Look-Ahead Bias Mitigation (Lag corporate earnings E and dividends D by 3 months)
-   ├─► 6. Inflation Normalization & Real Total Return Construction (CPI deflator, dividend reinvestment)
+   ├─► 6. Inflation Normalization, 10Y Bond & 1M T-Bill Total Return Construction (CPI, GS10, Ken French RF)
    ├─► 7. Signal & Feature Engineering (mom_6m, mom_12m, vol_12m, pe, cape, yield_gap, drawdown)
    └─► 8. Forward Multi-Horizon Target Formulation (fwd_ret_1y, fwd_ret_5y, fwd_ret_10y)
    │
-[data/shiller_clean.csv] (1,866 rows, 20 feature columns)
+[data/shiller_clean.csv] (1,866 rows, 32 columns)
 ```
 
 ### Was the "raw" data saved in addition to the preprocessed/cleaned/labeled data?
