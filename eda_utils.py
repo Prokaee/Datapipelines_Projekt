@@ -244,6 +244,138 @@ def forward_cumulative_return(tr_series: pd.Series, years: int) -> pd.Series:
     return tr_series.shift(-h) / tr_series - 1.0
 
 
+def _drawdown_description(
+    peak_date: pd.Timestamp,
+    trough_date: pd.Timestamp,
+) -> str:
+    """Return a concise historical label for major U.S. equity drawdowns."""
+    if 1999 <= peak_date.year <= 2002 and 2007 <= trough_date.year <= 2010:
+        return "Dot-com crash through Global Financial Crisis"
+    if 1914 <= peak_date.year <= 1918 and 1917 <= trough_date.year <= 1922:
+        return "World War I and post-war market stress"
+    if 1936 <= peak_date.year <= 1938 and 1940 <= trough_date.year <= 1943:
+        return "1937 recession through World War II"
+
+    periods = [
+        ("1871-01-01", "1879-12-01", "Panic of 1873 / Long Depression"),
+        ("1880-01-01", "1892-12-01", "1880s recession and deflation"),
+        ("1893-01-01", "1897-12-01", "Panic of 1893 / 1890s depression"),
+        ("1898-01-01", "1905-12-01", "Rich Man's Panic and post-boom decline"),
+        ("1906-01-01", "1909-12-01", "Panic of 1907"),
+        ("1910-01-01", "1918-12-01", "World War I market stress"),
+        ("1919-01-01", "1926-12-01", "Post-World War I depression"),
+        ("1927-01-01", "1940-12-01", "Great Depression"),
+        ("1941-01-01", "1945-12-01", "World War II bear market"),
+        (
+            "1946-01-01",
+            "1959-12-01",
+            "Post-war inflation / recession episodes",
+        ),
+        ("1960-01-01", "1965-12-01", "1962 bear market"),
+        ("1966-01-01", "1970-12-01", "1966–69 inflationary bear market"),
+        ("1971-01-01", "1979-12-01", "1973–74 oil shock and stagflation"),
+        (
+            "1980-01-01",
+            "1992-12-01",
+            "1980–82 recession / 1987 crash",
+        ),
+        ("1993-01-01", "1999-12-01", "1990s corrections"),
+        ("2000-01-01", "2004-12-01", "Dot-com crash and 2001 recession"),
+        ("2005-01-01", "2010-12-01", "Global Financial Crisis"),
+        ("2011-01-01", "2019-12-01", "2011–19 corrections"),
+        ("2020-01-01", "2020-12-01", "COVID-19 market crash"),
+        (
+            "2021-01-01",
+            "2026-12-01",
+            "Post-COVID inflation and rate-tightening cycle",
+        ),
+    ]
+    for start, end, label in periods:
+        if pd.Timestamp(start) <= trough_date <= pd.Timestamp(end):
+            return label
+    return "Historical equity-market drawdown"
+
+
+def _months_between(start: pd.Timestamp, end: pd.Timestamp) -> int:
+    """Count whole calendar months between two monthly observation dates."""
+    return (end.year - start.year) * 12 + end.month - start.month
+
+
+def drawdown_episodes(total_return_index: pd.Series) -> pd.DataFrame:
+    """Describe distinct drawdown episodes in a monthly total-return index.
+
+    A drawdown episode starts after the index leaves a previous all-time high
+    and ends when that high is regained. Depth is measured from the prior peak,
+    not from the immediately preceding local high.
+    """
+    wealth = total_return_index.dropna()
+    if wealth.empty:
+        return pd.DataFrame()
+
+    peak = wealth.cummax()
+    underwater = wealth.lt(peak)
+    starts = underwater & ~underwater.shift(fill_value=False)
+    episode_id = starts.cumsum()
+
+    records = []
+    for current_id in episode_id[underwater].unique():
+        dates = episode_id.index[(episode_id == current_id) & underwater]
+        first_underwater_position = wealth.index.get_loc(dates[0])
+        if first_underwater_position == 0:
+            peak_date = wealth.index[0]
+        else:
+            peak_date = wealth.index[first_underwater_position - 1]
+
+        trough_date = (wealth.loc[dates] / peak.loc[peak_date]).idxmin()
+        segment_dd = wealth.loc[dates] / peak.loc[dates] - 1.0
+        trough_value = float(segment_dd.min())
+
+        last_position = wealth.index.get_loc(dates[-1])
+        recovered = last_position + 1 < len(wealth)
+        recovery_date = wealth.index[last_position + 1] if recovered else pd.NaT
+        end_date = recovery_date if recovered else wealth.index[-1]
+        decline_months = _months_between(peak_date, trough_date)
+        recovery_months = (
+            _months_between(trough_date, recovery_date) if recovered else np.nan
+        )
+        underwater_months = _months_between(peak_date, end_date)
+
+        records.append(
+            {
+                "peak_date": peak_date,
+                "trough_date": trough_date,
+                "recovery_date": recovery_date,
+                "drawdown_pct": trough_value * 100.0,
+                "peak_to_trough_months": decline_months,
+                "trough_to_recovery_months": recovery_months,
+                "underwater_months": underwater_months,
+                "underwater_years": underwater_months / 12.0,
+                "recovered": recovered,
+                "description": _drawdown_description(peak_date, trough_date),
+            }
+        )
+    return pd.DataFrame(records)
+
+
+def drawdown_threshold_summary(episodes: pd.DataFrame) -> pd.DataFrame:
+    """Aggregate distinct episodes breaching 10%, 20%, 30%, and 50% drawdowns."""
+    rows = []
+    for threshold in (10.0, 20.0, 30.0, 50.0):
+        qualifying = episodes[episodes["drawdown_pct"] <= -threshold]
+        rows.append(
+            {
+                "drawdown_threshold_pct": threshold,
+                "episode_count": int(len(qualifying)),
+                "mean_underwater_years": qualifying["underwater_years"].mean(),
+                "median_underwater_years": qualifying["underwater_years"].median(),
+                "max_underwater_years": qualifying["underwater_years"].max(),
+                "mean_drawdown_pct": qualifying["drawdown_pct"].mean(),
+                "worst_drawdown_pct": qualifying["drawdown_pct"].min(),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def multi_horizon_asset_summary(
     df: pd.DataFrame,
     horizons: Iterable[int] = (1, 3, 5, 10, 15, 20),
