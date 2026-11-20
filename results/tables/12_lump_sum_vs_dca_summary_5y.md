@@ -1,0 +1,6 @@
+# Summary of 5-Year Lump-Sum vs 12-Month DCA Outcomes
+
+| basis   | n_windows | first_start         | last_start          | dca_win_probability_pct | median_lump_sum_terminal_wealth | median_dca_terminal_wealth | mean_lump_sum_terminal_wealth | mean_dca_terminal_wealth | median_dca_advantage | mean_dca_advantage | dca_over_lump_sum_5th_pct | dca_over_lump_sum_95th_pct |
+| ------- | --------- | ------------------- | ------------------- | ----------------------- | ------------------------------- | -------------------------- | ----------------------------- | ------------------------ | -------------------- | ------------------ | ------------------------- | -------------------------- |
+| Nominal | 1806      | 1871-01-01 00:00:00 | 2021-06-01 00:00:00 | 28.18                   | 15950.13                        | 15416.26                   | 16595.14                      | 15870.75                 | -638.72              | -724.39            | 84.32                     | 112.80                     |
+| Real    | 1806      | 1871-01-01 00:00:00 | 2021-06-01 00:00:00 | 33.06                   | 14282.19                        | 14005.52                   | 14932.56                      | 14409.70                 | -499.83              | -522.86            | 85.04                     | 115.16                     |
