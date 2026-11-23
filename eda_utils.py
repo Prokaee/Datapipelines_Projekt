@@ -296,12 +296,49 @@ def _drawdown_description(
     return "Historical equity-market drawdown"
 
 
+def _bond_drawdown_description(
+    peak_date: pd.Timestamp,
+    trough_date: pd.Timestamp,
+) -> str:
+    """Return a concise historical label for major U.S. 10-year bond drawdowns."""
+    if 1939 <= peak_date.year <= 1942 and 1979 <= trough_date.year <= 1982:
+        return "1941–81 secular rising-yield bond bear market"
+    if 1914 <= peak_date.year <= 1916 and 1919 <= trough_date.year <= 1921:
+        return "WWI and post-war inflation surge"
+    if 2019 <= peak_date.year <= 2021 and trough_date.year >= 2022:
+        return "Post-COVID inflation and Fed rate-hike cycle"
+    if 1978 <= peak_date.year <= 1981 and 1979 <= trough_date.year <= 1982:
+        return "Volcker tightening and 15% Treasury yield peak"
+    if 1993 <= peak_date.year <= 1994 and trough_date.year == 1994:
+        return "1994 Fed tightening bond selloff"
+    if 1897 <= peak_date.year <= 1900 and 1901 <= trough_date.year <= 1904:
+        return "Turn-of-century reflation and rising yields"
+    if 1878 <= peak_date.year <= 1880 and 1879 <= trough_date.year <= 1881:
+        return "1879–80 post-resumption inflation spike"
+    if 1953 <= peak_date.year <= 1960 and 1956 <= trough_date.year <= 1960:
+        return "1950s post-Accord yield normalization"
+    if 1967 <= peak_date.year <= 1971 and 1969 <= trough_date.year <= 1971:
+        return "Late-1960s inflation and Vietnam fiscal pressure"
+    if 1986 <= peak_date.year <= 1988 and trough_date.year == 1987:
+        return "1987 bond yield surge"
+    if 2003 <= peak_date.year <= 2004 and 2005 <= trough_date.year <= 2007:
+        return "2004–06 Fed rate-hike cycle"
+    if 2012 <= peak_date.year <= 2014 and 2013 <= trough_date.year <= 2014:
+        return "2013 Taper Tantrum"
+    if 2016 <= peak_date.year <= 2017 and 2018 <= trough_date.year <= 2019:
+        return "2016–18 Fed rate-hike cycle"
+    return "Historical Treasury yield-rise / inflation drawdown"
+
+
 def _months_between(start: pd.Timestamp, end: pd.Timestamp) -> int:
     """Count whole calendar months between two monthly observation dates."""
     return (end.year - start.year) * 12 + end.month - start.month
 
 
-def drawdown_episodes(total_return_index: pd.Series) -> pd.DataFrame:
+def drawdown_episodes(
+    total_return_index: pd.Series,
+    asset: str = "stocks",
+) -> pd.DataFrame:
     """Describe distinct drawdown episodes in a monthly total-return index.
 
     A drawdown episode starts after the index leaves a previous all-time high
@@ -316,6 +353,8 @@ def drawdown_episodes(total_return_index: pd.Series) -> pd.DataFrame:
     underwater = wealth.lt(peak)
     starts = underwater & ~underwater.shift(fill_value=False)
     episode_id = starts.cumsum()
+
+    desc_fn = _bond_drawdown_description if asset == "bonds" else _drawdown_description
 
     records = []
     for current_id in episode_id[underwater].unique():
@@ -351,7 +390,7 @@ def drawdown_episodes(total_return_index: pd.Series) -> pd.DataFrame:
                 "underwater_months": underwater_months,
                 "underwater_years": underwater_months / 12.0,
                 "recovered": recovered,
-                "description": _drawdown_description(peak_date, trough_date),
+                "description": desc_fn(peak_date, trough_date),
             }
         )
     return pd.DataFrame(records)

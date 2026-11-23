@@ -1,0 +1,14 @@
+# Top 5 Longest 10-Year U.S. Government Bond Drawdowns: Real vs. Nominal (1871–2026)
+
+| return_basis | rank | peak_date | trough_date | recovery_date | drawdown_pct | peak_to_trough_months | trough_to_recovery_months | underwater_months | underwater_years | recovered | description                                   |
+| ------------ | ---- | --------- | ----------- | ------------- | ------------ | --------------------- | ------------------------- | ----------------- | ---------------- | --------- | --------------------------------------------- |
+| Real         | 1    | 1941-01   | 1981-09     | 1986-08       | -58.23       | 488                   | 59.00                     | 547               | 45.58            | True      | 1941–81 secular rising-yield bond bear market |
+| Real         | 2    | 1915-09   | 1920-06     | 1927-01       | -44.43       | 57                    | 79.00                     | 136               | 11.33            | True      | WWI and post-war inflation surge              |
+| Real         | 3    | 1898-11   | 1902-10     | 1908-03       | -14.88       | 47                    | 65.00                     | 112               | 9.33             | True      | Turn-of-century reflation and rising yields   |
+| Real         | 4    | 2020-04   | 2023-10     |               | -37.34       | 42                    |                           | 74                | 6.17             | False     | Post-COVID inflation and Fed rate-hike cycle  |
+| Real         | 5    | 2003-06   | 2006-05     | 2008-01       | -11.17       | 35                    | 20.00                     | 55                | 4.58             | True      | 2004–06 Fed rate-hike cycle                   |
+| Nominal      | 1    | 2020-07   | 2023-10     |               | -25.23       | 39                    |                           | 71                | 5.92             | False     | Post-COVID inflation and Fed rate-hike cycle  |
+| Nominal      | 2    | 1954-07   | 1957-07     | 1957-12       | -4.85        | 36                    | 5.00                      | 41                | 3.42             | True      | 1950s post-Accord yield normalization         |
+| Nominal      | 3    | 2016-07   | 2018-10     | 2019-06       | -8.86        | 27                    | 8.00                      | 35                | 2.92             | True      | 2016–18 Fed rate-hike cycle                   |
+| Nominal      | 4    | 2012-07   | 2013-12     | 2015-01       | -8.89        | 17                    | 13.00                     | 30                | 2.50             | True      | 2013 Taper Tantrum                            |
+| Nominal      | 5    | 1958-04   | 1959-09     | 1960-07       | -9.10        | 17                    | 10.00                     | 27                | 2.25             | True      | 1950s post-Accord yield normalization         |

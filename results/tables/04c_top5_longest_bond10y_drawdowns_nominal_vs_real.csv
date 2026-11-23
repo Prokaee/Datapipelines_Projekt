@@ -1,0 +1,11 @@
+return_basis,rank,peak_date,trough_date,recovery_date,drawdown_pct,peak_to_trough_months,trough_to_recovery_months,underwater_months,underwater_years,recovered,description
+Real,1,1941-01,1981-09,1986-08,-58.23108734412019,488,59.0,547,45.583333333333336,True,1941–81 secular rising-yield bond bear market
+Real,2,1915-09,1920-06,1927-01,-44.42547467445704,57,79.0,136,11.333333333333334,True,WWI and post-war inflation surge
+Real,3,1898-11,1902-10,1908-03,-14.878223960730363,47,65.0,112,9.333333333333334,True,Turn-of-century reflation and rising yields
+Real,4,2020-04,2023-10,,-37.34413820323921,42,,74,6.166666666666667,False,Post-COVID inflation and Fed rate-hike cycle
+Real,5,2003-06,2006-05,2008-01,-11.173197021397218,35,20.0,55,4.583333333333333,True,2004–06 Fed rate-hike cycle
+Nominal,1,2020-07,2023-10,,-25.225901578137687,39,,71,5.916666666666667,False,Post-COVID inflation and Fed rate-hike cycle
+Nominal,2,1954-07,1957-07,1957-12,-4.8455433592827895,36,5.0,41,3.4166666666666665,True,1950s post-Accord yield normalization
+Nominal,3,2016-07,2018-10,2019-06,-8.86445914259868,27,8.0,35,2.9166666666666665,True,2016–18 Fed rate-hike cycle
+Nominal,4,2012-07,2013-12,2015-01,-8.891665338914557,17,13.0,30,2.5,True,2013 Taper Tantrum
+Nominal,5,1958-04,1959-09,1960-07,-9.100147916138779,17,10.0,27,2.25,True,1950s post-Accord yield normalization
